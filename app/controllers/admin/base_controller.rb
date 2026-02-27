@@ -6,13 +6,13 @@ module Admin
 
     private
 
-    # Turbo Drive requires 303 (See Other) for redirects after non-GET form
-    # submissions, otherwise the browser may not follow the redirect properly.
-    def redirect_to(url_or_options = {}, response_options = {})
-      if request.method != "GET" && !response_options.key?(:status)
-        response_options[:status] = :see_other
+    # Turbo Drive requires 303 See Other for redirects after non-GET form
+    # submissions so the browser follows the redirect with a GET request.
+    def redirect_to(url = {}, options = {})
+      if request.method != "GET" && !options.key?(:status)
+        options[:status] = :see_other
       end
-      super
+      super(url, options)
     end
 
     def require_admin!
