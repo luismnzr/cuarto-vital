@@ -1,6 +1,6 @@
 class WellhubSetupService
   class << self
-    # Called when a studio selects Eclipse as their CMS in the Wellhub portal.
+    # Called when a studio selects Cuarto Vital as their CMS in the Wellhub portal.
     # Stores the gym_id and registers webhooks, but does NOT auto-enable —
     # the admin must enable Wellhub from the settings page.
     def integration_requested(payload)

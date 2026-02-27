@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-puts "Seeding Eclipse database..."
+puts "Seeding Cuarto Vital database..."
 
 # Studio Settings
 StudioSetting::DEFAULTS.each do |key, value|
@@ -8,14 +8,14 @@ StudioSetting::DEFAULTS.each do |key, value|
     setting.value = value
   end
 end
-StudioSetting.set("studio_name", "Eclipse Studio")
-StudioSetting.set("studio_email", "hello@eclipse.dev")
+StudioSetting.set("studio_name", "Cuarto Vital")
+StudioSetting.set("studio_email", "hello@cuartovital.com")
 StudioSetting.set("studio_phone", "+52 55 1234 5678")
 StudioSetting.set("studio_address", "Av. Reforma 222, CDMX")
 puts "  ✓ Studio settings"
 
 # Users
-admin = User.find_or_create_by!(email: "admin@eclipse.dev") do |u|
+admin = User.find_or_create_by!(email: "admin@cuartovital.com") do |u|
   u.first_name = "Admin"
   u.last_name = "User"
   u.password = "password"
@@ -23,7 +23,7 @@ admin = User.find_or_create_by!(email: "admin@eclipse.dev") do |u|
   u.role = :admin
 end
 
-teacher = User.find_or_create_by!(email: "teacher@eclipse.dev") do |u|
+teacher = User.find_or_create_by!(email: "teacher@cuartovital.com") do |u|
   u.first_name = "María"
   u.last_name = "García"
   u.password = "password"
@@ -31,7 +31,7 @@ teacher = User.find_or_create_by!(email: "teacher@eclipse.dev") do |u|
   u.role = :teacher
 end
 
-teacher2 = User.find_or_create_by!(email: "teacher2@eclipse.dev") do |u|
+teacher2 = User.find_or_create_by!(email: "teacher2@cuartovital.com") do |u|
   u.first_name = "Carlos"
   u.last_name = "López"
   u.password = "password"
@@ -39,7 +39,7 @@ teacher2 = User.find_or_create_by!(email: "teacher2@eclipse.dev") do |u|
   u.role = :teacher
 end
 
-student = User.find_or_create_by!(email: "student@eclipse.dev") do |u|
+student = User.find_or_create_by!(email: "student@cuartovital.com") do |u|
   u.first_name = "Ana"
   u.last_name = "Martínez"
   u.password = "password"
@@ -47,7 +47,7 @@ student = User.find_or_create_by!(email: "student@eclipse.dev") do |u|
   u.role = :student
 end
 
-student2 = User.find_or_create_by!(email: "student2@eclipse.dev") do |u|
+student2 = User.find_or_create_by!(email: "student2@cuartovital.com") do |u|
   u.first_name = "Luis"
   u.last_name = "Hernández"
   u.password = "password"
@@ -247,6 +247,6 @@ end
 puts "  ✓ #{class_count} scheduled classes (2 weeks)"
 
 puts "\nSeeding complete!"
-puts "  Admin:   admin@eclipse.dev / password"
-puts "  Teacher: teacher@eclipse.dev / password"
-puts "  Student: student@eclipse.dev / password"
+puts "  Admin:   admin@cuartovital.com / password"
+puts "  Teacher: teacher@cuartovital.com / password"
+puts "  Student: student@cuartovital.com / password"

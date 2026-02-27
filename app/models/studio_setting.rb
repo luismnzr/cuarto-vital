@@ -2,7 +2,7 @@ class StudioSetting < ApplicationRecord
   validates :key, presence: true, uniqueness: true
 
   DEFAULTS = {
-    "studio_name" => "Studio",
+    "studio_name" => "Cuarto Vital",
     "studio_email" => "",
     "studio_phone" => "",
     "studio_address" => "",

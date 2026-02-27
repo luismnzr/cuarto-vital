@@ -2,7 +2,7 @@ require "test_helper"
 
 class StudioSettingTest < ActiveSupport::TestCase
   test "get returns default when not set" do
-    assert_equal "Studio", StudioSetting.get("studio_name")
+    assert_equal "Cuarto Vital", StudioSetting.get("studio_name")
   end
 
   test "set and get" do

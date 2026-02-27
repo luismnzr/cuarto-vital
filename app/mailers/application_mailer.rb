@@ -11,6 +11,6 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def from_address
-    ENV.fetch("MAILER_FROM_ADDRESS", "hello@eclipse.dev")
+    ENV.fetch("MAILER_FROM_ADDRESS", "hello@cuartovital.com")
   end
 end
