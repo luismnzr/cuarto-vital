@@ -7,8 +7,10 @@ module Admin
     end
 
     def update
+      updated = 0
       params[:settings]&.each do |key, value|
         StudioSetting.set(key, value)
+        updated += 1
       end
 
       # Update Wellhub category mappings
@@ -16,7 +18,9 @@ module Admin
         Category.find_by(id: category_id)&.update(wellhub_category_id: wellhub_id.presence)
       end
 
-      redirect_to admin_settings_path, notice: "Settings updated successfully."
+      redirect_to admin_settings_path, notice: "Settings updated successfully (#{updated} settings saved)."
+    rescue => e
+      redirect_to admin_settings_path, alert: "Error saving settings: #{e.message}"
     end
 
     def sync_wellhub
