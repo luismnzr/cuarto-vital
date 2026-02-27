@@ -240,8 +240,9 @@ GEM
     nokogiri (1.19.0-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    pagy (43.2.9)
+    pagy (43.3.1)
       json
+      uri
       yaml
     parallel (1.27.0)
     parser (3.3.10.1)
@@ -414,6 +415,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
+    uri (1.1.1)
     useragent (0.16.11)
     view_component (4.3.0)
       actionview (>= 7.1.0)
