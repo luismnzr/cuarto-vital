@@ -3,7 +3,14 @@
 <div class="max-w-4xl">
   <div class="flex items-center justify-between mb-6">
     <%= link_to "&larr; Back to Users".html_safe, admin_users_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
-    <%= link_to "Edit User", edit_admin_user_path(@user), class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+    <div class="flex items-center gap-2">
+      <%= link_to "Edit User", edit_admin_user_path(@user), class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+      <% if policy(@user).destroy? %>
+        <%= button_to "Delete User", admin_user_path(@user), method: :delete,
+              form: { data: { turbo_confirm: "Are you sure you want to delete #{@user.full_name}? This will permanently remove their account and all associated data." } },
+              class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-destructive)] rounded-lg hover:bg-[var(--color-destructive)]/90 transition-colors cursor-pointer" %>
+      <% end %>
+    </div>
   </div>
 
   <div class="bg-white rounded-xl border border-[var(--color-border)] p-6 mb-6">

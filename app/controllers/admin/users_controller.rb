@@ -61,6 +61,13 @@ module Admin
       redirect_to admin_user_path(@user), alert: "Failed to sell package: #{e.message}"
     end
 
+    def destroy
+      @user = User.find(params[:id])
+      authorize @user
+      @user.destroy!
+      redirect_to admin_users_path, notice: "#{@user.full_name} has been deleted."
+    end
+
     def edit
       @user = User.find(params[:id])
       authorize @user

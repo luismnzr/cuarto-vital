@@ -36,7 +36,7 @@ module MailerHelper
     StudioSetting.cancellation_window_hours
   end
 
-  def email_button(text, url, color: "#6366f1")
+  def email_button(text, url, color: "#6F7C4E")
     content_tag(:table, role: "presentation", cellpadding: "0", cellspacing: "0", style: "margin: 24px 0;") do
       content_tag(:tr) do
         content_tag(:td, style: "border-radius: 8px; background-color: #{color};") do

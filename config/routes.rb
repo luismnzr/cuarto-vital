@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   # Admin namespace
   namespace :admin do
     get "/", to: "dashboard#show", as: :dashboard
-    resources :users, only: [:index, :show, :new, :create, :edit, :update] do
+    resources :users, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
       post :sell_package, on: :member
     end
     resources :classes, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
