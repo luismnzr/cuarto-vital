@@ -1,0 +1,90 @@
+<% content_for(:page_title) { "Wellhub Booking ##{@booking.booking_number}" } %>
+
+<%= link_to "&larr; Back to Wellhub Bookings".html_safe, admin_wellhub_bookings_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+
+<div class="mt-4 max-w-2xl">
+  <div class="flex items-center gap-3 mb-6">
+    <h2 class="text-lg font-semibold">Booking #<%= @booking.booking_number %></h2>
+    <% status_classes = case @booking.status
+       when "accepted" then "bg-emerald-50 text-emerald-700"
+       when "pending" then "bg-amber-50 text-amber-700"
+       when "checked_in" then "bg-blue-50 text-blue-700"
+       when "rejected" then "bg-red-50 text-red-700"
+       when "cancelled" then "bg-gray-100 text-gray-600"
+       else "bg-gray-100 text-gray-600"
+       end %>
+    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <%= status_classes %>">
+      <%= @booking.status.titleize %>
+    </span>
+  </div>
+
+  <!-- Booking Details -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6 mb-6">
+    <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Booking Details</h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Booking Number</dt>
+        <dd class="text-sm font-mono font-medium text-[var(--color-foreground)]"><%= @booking.booking_number %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Gympass ID</dt>
+        <dd class="text-sm font-mono text-[var(--color-foreground)]"><%= @booking.gympass_id %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Booked At</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.booked_at&.strftime("%b %d, %Y at %l:%M %p") || "—" %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Responded At</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.responded_at&.strftime("%b %d, %Y at %l:%M %p") || "—" %></dd>
+      </div>
+      <% if @booking.checked_in_at %>
+        <div class="flex justify-between">
+          <dt class="text-sm text-[var(--color-muted-foreground)]">Checked In At</dt>
+          <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.checked_in_at.strftime("%b %d, %Y at %l:%M %p") %></dd>
+        </div>
+      <% end %>
+      <% if @booking.cancelled_at %>
+        <div class="flex justify-between">
+          <dt class="text-sm text-[var(--color-muted-foreground)]">Cancelled At</dt>
+          <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.cancelled_at.strftime("%b %d, %Y at %l:%M %p") %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <!-- Class Details -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Class Details</h3>
+    <dl class="space-y-3">
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Class</dt>
+        <dd class="text-sm font-medium text-[var(--color-foreground)]">
+          <%= link_to @booking.studio_class.name, admin_class_path(@booking.studio_class), class: "text-[var(--color-primary)] hover:underline" %>
+        </dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Date</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.studio_class.date.strftime("%b %d, %Y") %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Time</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.studio_class.start_time.strftime("%l:%M %p").strip %> — <%= @booking.studio_class.end_time.strftime("%l:%M %p").strip %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Teacher</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.studio_class.teacher.full_name %></dd>
+      </div>
+      <div class="flex justify-between">
+        <dt class="text-sm text-[var(--color-muted-foreground)]">Capacity</dt>
+        <dd class="text-sm text-[var(--color-foreground)]"><%= @booking.studio_class.capacity - @booking.studio_class.spots_remaining %> / <%= @booking.studio_class.capacity %></dd>
+      </div>
+      <% if @booking.studio_class.wellhub_slot_id %>
+        <div class="flex justify-between">
+          <dt class="text-sm text-[var(--color-muted-foreground)]">Wellhub Slot ID</dt>
+          <dd class="text-sm font-mono text-[var(--color-muted-foreground)]"><%= @booking.studio_class.wellhub_slot_id %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</div>

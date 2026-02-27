@@ -1,0 +1,8 @@
+<% content_for(:page_title) { "Edit Class" } %>
+<div class="max-w-2xl">
+  <%= link_to "&larr; Back to Classes".html_safe, admin_classes_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] mb-4 inline-block" %>
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <h2 class="text-lg font-semibold mb-6">Edit Class</h2>
+    <%= render "form", studio_class: @studio_class %>
+  </div>
+</div>

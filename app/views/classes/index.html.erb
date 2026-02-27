@@ -1,0 +1,173 @@
+<% content_for(:title) { "Class Schedule" } %>
+
+<%
+  days = (0..6).map { |i| @week_start + i.days }
+  classes_by_date = @studio_classes.group_by(&:date)
+  week_days_short = %w[MON TUE WED THU FRI SAT SUN]
+  week_days_full = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]
+  prev_week = @week_start - 7.days
+  next_week = @week_start + 7.days
+%>
+
+<div class="min-h-screen bg-[var(--color-muted)] py-8 px-4" data-controller="calendar">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-[var(--color-foreground)]">Class Schedule</h1>
+      <p class="text-[var(--color-muted-foreground)] mt-1">Book your spot in upcoming classes</p>
+    </div>
+
+    <!-- Calendar Controls -->
+    <%= render Ui::CardComponent.new(padding: true) do %>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div class="flex items-center gap-4">
+          <%= link_to classes_path(week_start: prev_week.to_s),
+                class: "inline-flex items-center justify-center h-8 w-8 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-transparent hover:bg-[var(--color-secondary)] transition-colors" do %>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          <% end %>
+          <div class="text-center">
+            <h3 class="text-lg font-semibold text-[var(--color-foreground)]"><%= @week_start.strftime("%B %Y") %></h3>
+            <p class="text-xs text-[var(--color-muted-foreground)]">
+              Week of <%= @week_start.strftime("%b %-d") %> - <%= @week_end.strftime("%b %-d") %>
+            </p>
+          </div>
+          <%= link_to classes_path(week_start: next_week.to_s),
+                class: "inline-flex items-center justify-center h-8 w-8 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-transparent hover:bg-[var(--color-secondary)] transition-colors" do %>
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          <% end %>
+        </div>
+
+        <div class="flex gap-2">
+          <button
+            type="button"
+            data-calendar-target="weekBtn"
+            data-action="click->calendar#showWeek"
+            class="active-view inline-flex items-center justify-center font-medium transition-colors rounded-[var(--radius-md)] h-8 px-3 text-xs"
+          >
+            Week View
+          </button>
+          <button
+            type="button"
+            data-calendar-target="listBtn"
+            data-action="click->calendar#showList"
+            class="inactive-view inline-flex items-center justify-center font-medium transition-colors rounded-[var(--radius-md)] h-8 px-3 text-xs"
+          >
+            List View
+          </button>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Week View -->
+    <div data-calendar-target="weekView">
+      <% if @studio_classes.any? %>
+        <div style="display: grid; grid-template-columns: repeat(7, minmax(140px, 1fr)); gap: 1rem; overflow-x: auto;">
+          <% days.each_with_index do |day, index| %>
+            <div style="min-height: 400px;">
+              <!-- Day header -->
+              <div class="bg-[var(--color-accent)]/10 rounded-t-[var(--radius-md)] p-3 text-center mb-2">
+                <p class="text-xs text-[var(--color-muted-foreground)] mb-1"><%= week_days_short[index] %></p>
+                <p class="font-semibold text-[var(--color-foreground)] <%= day == Date.current ? 'bg-[var(--color-primary)] text-white w-7 h-7 rounded-full flex items-center justify-center mx-auto text-sm' : '' %>">
+                  <%= day.day %>
+                </p>
+              </div>
+
+              <!-- Class cards for this day -->
+              <div class="space-y-2">
+                <% (classes_by_date[day] || []).each do |sc| %>
+                  <%= link_to class_path(sc), class: "block" do %>
+                    <div class="bg-[var(--color-background)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-sm)] p-3 cursor-pointer hover:shadow-[var(--shadow-md)] transition-shadow flex flex-col overflow-hidden">
+                      <p class="text-xs text-[var(--color-muted-foreground)] mb-1 truncate">
+                        <%= sc.start_time.strftime("%l:%M").strip %> - <%= sc.end_time.strftime("%l:%M %p").strip %>
+                      </p>
+                      <p class="text-xs font-semibold text-[var(--color-foreground)] mb-1 line-clamp-2">
+                        <%= sc.name %>
+                      </p>
+                      <p class="text-xs text-[var(--color-muted-foreground)] mb-2 truncate"><%= sc.teacher.full_name %></p>
+                      <span style="display: inline-flex; align-items: center; border-radius: 9999px; padding: 2px 8px; font-size: 0.75rem; font-weight: 500; background: white; border: 1px solid var(--color-border); color: var(--color-muted-foreground); width: fit-content;"><%= sc.capacity - sc.spots_remaining %>/<%= sc.capacity %> spots</span>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-20 bg-white rounded-xl border border-[var(--color-border)]">
+          <svg class="h-12 w-12 text-[var(--color-muted-foreground)] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <p class="text-[var(--color-muted-foreground)] font-medium">No classes scheduled this week</p>
+          <p class="text-sm text-[var(--color-muted-foreground)] mt-1">Try navigating to a different week</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- List View -->
+    <div data-calendar-target="listView" class="hidden">
+      <% if @studio_classes.any? %>
+        <div class="space-y-8">
+          <% classes_by_date.each do |date, day_classes| %>
+            <div>
+              <h3 class="text-sm font-semibold text-[var(--color-muted-foreground)] uppercase tracking-wider mb-4">
+                <%= date.strftime("%A, %B %-d") %>
+                <% if date == Date.current %>
+                  <span class="ml-2 px-2 py-0.5 text-xs font-medium bg-[var(--color-primary)] text-white rounded-full normal-case">Today</span>
+                <% end %>
+              </h3>
+              <div class="space-y-4">
+                <% day_classes.each do |sc| %>
+                  <div class="bg-[var(--color-background)] rounded-[var(--radius-lg)] border border-[var(--color-border)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                          <%= render Ui::BadgeComponent.new(text: sc.category.name, variant: :secondary) %>
+                          <h4 class="font-semibold text-[var(--color-foreground)]"><%= sc.name %></h4>
+                        </div>
+                        <p class="text-[var(--color-muted-foreground)] mb-2">
+                          with <%= sc.teacher.full_name %>
+                        </p>
+                        <div class="flex flex-wrap gap-4 text-[var(--color-muted-foreground)]">
+                          <div class="flex items-center gap-2">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span class="text-xs">
+                              <%= sc.start_time.strftime("%l:%M").strip %> - <%= sc.end_time.strftime("%l:%M %p").strip %> &bull; <%= sc.duration %> min
+                            </span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                            <span class="text-xs">
+                              <%= sc.capacity - sc.spots_remaining %>/<%= sc.capacity %> booked
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center gap-3">
+                        <% if sc.full? %>
+                          <span class="inline-flex items-center rounded-[var(--radius-full)] px-2.5 py-0.5 text-xs font-medium bg-[var(--color-destructive)] text-[var(--color-destructive-foreground)]">Full</span>
+                        <% elsif sc.spots_remaining <= 3 %>
+                          <span class="inline-flex items-center rounded-[var(--radius-full)] px-2.5 py-0.5 text-xs font-medium bg-[var(--color-warning)] text-[var(--color-warning-foreground)]">Almost Full</span>
+                        <% else %>
+                          <span class="inline-flex items-center rounded-[var(--radius-full)] px-2.5 py-0.5 text-xs font-medium bg-[var(--color-success)] text-[var(--color-success-foreground)]"><%= sc.spots_remaining %> spots</span>
+                        <% end %>
+                        <%= link_to class_path(sc),
+                              class: "inline-flex items-center justify-center font-medium transition-colors rounded-[var(--radius-md)] h-8 px-3 text-xs #{sc.full? ? 'bg-[var(--color-secondary)] text-[var(--color-muted-foreground)] pointer-events-none opacity-50' : 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:opacity-90'}" do %>
+                          <%= sc.full? ? "Fully Booked" : "Book Now" %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-20 bg-white rounded-xl border border-[var(--color-border)]">
+          <svg class="h-12 w-12 text-[var(--color-muted-foreground)] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <p class="text-[var(--color-muted-foreground)] font-medium">No classes scheduled this week</p>
+          <p class="text-sm text-[var(--color-muted-foreground)] mt-1">Try navigating to a different week</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div data-controller="tabs" data-tabs-active-class="border-[var(--color-primary)] text-[var(--color-foreground)]" data-tabs-inactive-class="border-transparent text-[var(--color-muted-foreground)]" id="<%= @id %>">
+  <div class="border-b border-[var(--color-border)]" role="tablist">
+    <nav class="flex gap-0 -mb-px">
+      <% tabs.each do |tab| %>
+        <button type="button"
+                class="inline-flex items-center border-b-2 px-4 py-3 text-sm font-medium transition-colors hover:text-[var(--color-foreground)] <%= tab.active ? 'border-[var(--color-primary)] text-[var(--color-foreground)]' : 'border-transparent text-[var(--color-muted-foreground)]' %>"
+                data-action="tabs#select"
+                data-tabs-target="tab"
+                data-tab-id="<%= tab.tab_id %>"
+                role="tab"
+                aria-selected="<%= tab.active %>">
+          <%= tab.label %>
+        </button>
+      <% end %>
+    </nav>
+  </div>
+  <div class="pt-4">
+    <% tabs.each do |tab| %>
+      <%= tab %>
+    <% end %>
+  </div>
+</div>

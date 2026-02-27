@@ -1,0 +1,16 @@
+<div class="w-full overflow-auto rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+  <table class="w-full caption-bottom text-sm">
+    <% if header? %>
+      <thead class="border-b border-[var(--color-border)] bg-[var(--color-muted)]">
+        <%= header %>
+      </thead>
+    <% end %>
+    <tbody class="<%= 'divide-y divide-[var(--color-border)]' %>">
+      <% body_rows.each_with_index do |row, i| %>
+        <tr class="<%= 'bg-[var(--color-muted)]/50' if @striped && i.odd? %> transition-colors hover:bg-[var(--color-muted)]/50">
+          <%= row %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

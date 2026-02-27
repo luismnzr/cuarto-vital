@@ -1,0 +1,45 @@
+<% content_for(:title) { "Set New Password" } %>
+
+<div class="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold">Set new password</h1>
+      <p class="text-[var(--color-muted-foreground)] mt-2">Enter your new password below</p>
+    </div>
+
+    <%= render Ui::CardComponent.new do %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: "space-y-4" }) do |f| %>
+        <%= f.hidden_field :reset_password_token %>
+
+        <% if resource.errors.any? %>
+          <%= render Ui::AlertComponent.new(variant: :destructive, title: "Please fix the following errors:") do %>
+            <ul class="list-disc list-inside mt-1">
+              <% resource.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+
+        <%= render Ui::InputComponent.new(
+          name: "user[password]",
+          type: "password",
+          label: "New Password",
+          hint: "Minimum 6 characters",
+          required: true,
+          autocomplete: "new-password"
+        ) %>
+
+        <%= render Ui::InputComponent.new(
+          name: "user[password_confirmation]",
+          type: "password",
+          label: "Confirm Password",
+          required: true,
+          autocomplete: "new-password"
+        ) %>
+
+        <%= render Ui::ButtonComponent.new(type: "submit", full_width: true) do %>Reset Password<% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

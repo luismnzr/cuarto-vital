@@ -1,0 +1,13 @@
+Class Cancelled
+
+Hi <%= @user.first_name %>, we're sorry to let you know that the following class has been cancelled.
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+
+Your class credit has been automatically restored. No action needed on your part.
+
+We apologize for the inconvenience. We hope to see you in another class soon!
+
+Browse classes: <%= classes_url %>

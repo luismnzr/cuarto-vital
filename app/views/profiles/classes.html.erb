@@ -1,0 +1,55 @@
+<% content_for(:title) { "My Classes" } %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-2xl font-bold mb-8">My Classes</h1>
+
+  <h2 class="text-lg font-semibold mb-4">Upcoming Reservations</h2>
+  <% if @upcoming_reservations.any? %>
+    <div class="space-y-3 mb-10">
+      <% @upcoming_reservations.each do |reservation| %>
+        <%= render Ui::CardComponent.new do %>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold"><%= reservation.studio_class.name %></h3>
+              <p class="text-sm text-[var(--color-muted-foreground)]">
+                <%= reservation.studio_class.date.strftime("%A, %B %d") %> at
+                <%= reservation.studio_class.start_time.strftime("%l:%M %p").strip %>
+                &middot; <%= reservation.studio_class.teacher.full_name %>
+              </p>
+            </div>
+            <div class="flex items-center gap-3">
+              <%= render Ui::BadgeComponent.new(text: "Confirmed", variant: :success) %>
+              <%= button_to reservation_path(reservation), method: :delete,
+                    data: { turbo: false, turbo_confirm: "Are you sure you want to cancel this reservation?" },
+                    class: "inline-flex items-center px-3 py-1.5 text-xs font-medium text-[var(--color-destructive)] border border-[var(--color-destructive)]/30 rounded-lg hover:bg-[var(--color-destructive)]/5 transition-colors cursor-pointer" do %>
+                Cancel
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-[var(--color-muted-foreground)] mb-10">No upcoming reservations. <%= link_to "Browse classes", classes_path, class: "hover:underline font-medium" %></p>
+  <% end %>
+
+  <h2 class="text-lg font-semibold mb-4">Class History</h2>
+  <% if @past_reservations.any? %>
+    <div class="space-y-2">
+      <% @past_reservations.each do |reservation| %>
+        <div class="flex items-center justify-between py-3 border-b border-[var(--color-border)]">
+          <div>
+            <p class="font-medium"><%= reservation.studio_class.name %></p>
+            <p class="text-sm text-[var(--color-muted-foreground)]"><%= reservation.studio_class.date.strftime("%B %d, %Y") %></p>
+          </div>
+          <%= render Ui::BadgeComponent.new(
+            text: reservation.status.titleize,
+            variant: reservation.status == "completed" ? :success : (reservation.status == "cancelled" ? :secondary : :destructive)
+          ) %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-[var(--color-muted-foreground)]">No class history yet.</p>
+  <% end %>
+</div>

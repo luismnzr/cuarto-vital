@@ -1,0 +1,66 @@
+<% content_for(:page_title) { "Classes" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <p class="text-sm text-[var(--color-muted-foreground)]"><%= @pagy.count %> classes</p>
+  <%= link_to "New Class", new_admin_class_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+</div>
+
+<div class="flex items-center gap-1 mb-6 border-b border-[var(--color-border)]">
+  <%= link_to "Upcoming", admin_classes_path, class: "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors #{params[:tab].blank? ? 'border-[var(--color-primary)] text-[var(--color-primary)]' : 'border-transparent text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'}" %>
+  <%= link_to "Past", admin_classes_path(tab: "past"), class: "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors #{params[:tab] == 'past' ? 'border-[var(--color-primary)] text-[var(--color-primary)]' : 'border-transparent text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'}" %>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Class</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Date</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Time</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Teacher</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Bookings</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Status</th>
+        <th class="px-5 py-3 text-right font-medium text-[var(--color-muted-foreground)]">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @studio_classes.each do |sc| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3">
+            <p class="font-medium text-[var(--color-foreground)]"><%= sc.name %></p>
+            <p class="text-xs text-[var(--color-muted-foreground)]"><%= sc.category.name %></p>
+          </td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= sc.date.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= sc.start_time.strftime("%l:%M %p").strip %></td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= sc.teacher.full_name %></td>
+          <td class="px-5 py-3">
+            <span class="font-medium"><%= sc.capacity - sc.spots_remaining %></span>/<%= sc.capacity %>
+          </td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                        <%= case sc.status; when 'scheduled' then 'bg-emerald-50 text-emerald-700'; when 'cancelled' then 'bg-red-50 text-red-700'; else 'bg-gray-100 text-gray-700'; end %>">
+              <%= sc.status.titleize %>
+            </span>
+          </td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "Roster", admin_class_path(sc), class: "text-[var(--color-primary)] hover:underline font-medium" %>
+            <%= link_to "Edit", edit_admin_class_path(sc), class: "text-[var(--color-primary)] hover:underline font-medium ml-3" %>
+            <% if sc.status == "scheduled" %>
+              <%= button_to admin_class_path(sc), method: :delete,
+                    data: { turbo_confirm: "Cancel this class?" },
+                    class: "text-[var(--color-destructive)] hover:underline ml-3 cursor-pointer" do %>
+                Cancel
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <div class="flex justify-center mt-6">
+    <%== @pagy.series_nav %>
+  </div>
+<% end %>

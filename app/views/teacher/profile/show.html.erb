@@ -1,0 +1,60 @@
+<div class="max-w-3xl">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">My Profile</h1>
+    <%= link_to "Edit Profile", edit_teacher_profile_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+    <!-- Profile header -->
+    <div class="px-6 py-6 flex items-center gap-5">
+      <% if current_user.photo.attached? %>
+        <%= render Ui::AvatarComponent.new(
+          name: current_user.full_name,
+          src: url_for(current_user.photo.variant(resize_to_fill: [160, 160])),
+          size: :xl
+        ) %>
+      <% else %>
+        <%= render Ui::AvatarComponent.new(name: current_user.full_name, size: :xl) %>
+      <% end %>
+
+      <div>
+        <h2 class="text-lg font-semibold"><%= current_user.full_name %></h2>
+        <p class="text-sm text-[var(--color-muted-foreground)]"><%= current_user.email %></p>
+        <% if current_user.phone.present? %>
+          <p class="text-sm text-[var(--color-muted-foreground)]"><%= current_user.phone %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border-t border-[var(--color-border)] px-6 py-5 space-y-5">
+      <!-- Styles -->
+      <% if current_user.styles_list.any? %>
+        <div>
+          <p class="text-sm font-medium text-[var(--color-foreground)] mb-2">Styles I Teach</p>
+          <div class="flex flex-wrap gap-2">
+            <% current_user.styles_list.each do |style| %>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                <%= style %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Bio -->
+      <% if current_user.bio.present? %>
+        <div>
+          <p class="text-sm font-medium text-[var(--color-foreground)] mb-1">About Me</p>
+          <p class="text-sm text-[var(--color-muted-foreground)] whitespace-pre-line"><%= current_user.bio %></p>
+        </div>
+      <% end %>
+
+      <% if current_user.styles_list.empty? && current_user.bio.blank? %>
+        <div class="text-center py-6">
+          <p class="text-sm text-[var(--color-muted-foreground)]">Your profile is looking a bit empty.</p>
+          <%= link_to "Complete your profile", edit_teacher_profile_path, class: "text-sm text-[var(--color-primary)] font-medium hover:underline" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

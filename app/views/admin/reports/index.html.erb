@@ -1,0 +1,153 @@
+<% content_for(:page_title) { "Reports" } %>
+<div class="mb-6">
+  <h2 class="text-lg font-semibold">Reports</h2>
+  <p class="text-sm text-[var(--color-muted-foreground)] mt-1">View studio analytics and export data.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- Revenue Report -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-emerald-50 flex items-center justify-center">
+        <svg class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-[var(--color-foreground)]">Revenue</h3>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Package sales and subscription revenue</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= number_to_currency(UserPackage.where("user_packages.created_at >= ?", Date.current.beginning_of_month).joins(:package).sum("packages.price")) %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Total Packages Sold</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= UserPackage.count %></p>
+      </div>
+    </div>
+    <%= link_to admin_reports_path(export: "revenue", format: :csv), class: "inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Export CSV
+    <% end %>
+  </div>
+
+  <!-- Class Attendance -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center">
+        <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-[var(--color-foreground)]">Attendance</h3>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Class bookings and attendance data</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= Reservation.where("created_at >= ?", Date.current.beginning_of_month).confirmed.count %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Cancellation Rate</p>
+        <% total = Reservation.where("created_at >= ?", Date.current.beginning_of_month).count %>
+        <% cancelled = Reservation.where("created_at >= ?", Date.current.beginning_of_month).cancelled.count %>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= total > 0 ? "#{(cancelled.to_f / total * 100).round(1)}%" : "0%" %></p>
+      </div>
+    </div>
+    <%= link_to admin_reports_path(export: "attendance", format: :csv), class: "inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Export CSV
+    <% end %>
+  </div>
+
+  <!-- Student Report -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center">
+        <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-[var(--color-foreground)]">Students</h3>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Student roster and activity</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Total Students</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= User.where(role: :student).count %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">New This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= User.where(role: :student).where("created_at >= ?", Date.current.beginning_of_month).count %></p>
+      </div>
+    </div>
+    <%= link_to admin_reports_path(export: "students", format: :csv), class: "inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Export CSV
+    <% end %>
+  </div>
+
+  <!-- Shop Sales -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-rose-50 flex items-center justify-center">
+        <svg class="h-5 w-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-[var(--color-foreground)]">Shop Sales</h3>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Product orders and revenue</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Revenue This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= number_to_currency(Order.completed.where("created_at >= ?", Date.current.beginning_of_month).sum(:total)) %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Orders This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= Order.completed.where("created_at >= ?", Date.current.beginning_of_month).count %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Total Revenue</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= number_to_currency(Order.completed.sum(:total)) %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Top Product</p>
+        <% top_product = Product.joins(order_items: :order).where(orders: { status: "completed" }).group("products.name").order("SUM(order_items.quantity) DESC").limit(1).pluck(:name, Arel.sql("SUM(order_items.quantity)")).first %>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= top_product ? "#{top_product[0]} (#{top_product[1].to_i})" : "—" %></p>
+      </div>
+    </div>
+    <%= link_to admin_reports_path(export: "shop", format: :csv), class: "inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Export CSV
+    <% end %>
+  </div>
+
+  <!-- Teacher Report -->
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="h-10 w-10 rounded-lg bg-amber-50 flex items-center justify-center">
+        <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-[var(--color-foreground)]">Teachers</h3>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Teacher schedules and class counts</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Active Teachers</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= User.where(role: :teacher).count %></p>
+      </div>
+      <div>
+        <p class="text-xs text-[var(--color-muted-foreground)]">Classes This Month</p>
+        <p class="text-lg font-bold text-[var(--color-foreground)]"><%= StudioClass.where("date >= ? AND date <= ?", Date.current.beginning_of_month, Date.current.end_of_month).count %></p>
+      </div>
+    </div>
+    <%= link_to admin_reports_path(export: "teachers", format: :csv), class: "inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" do %>
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Export CSV
+    <% end %>
+  </div>
+</div>

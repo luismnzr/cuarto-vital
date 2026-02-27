@@ -1,0 +1,13 @@
+Subscription Confirmed
+
+Hi <%= @user.first_name %>, your subscription is now active!
+
+Plan: <%= @plan.name %>
+Price: <%= format_currency(@plan.price) %>/<%= @plan.interval %>
+<% if @subscription.current_period_end.present? %>
+Next Billing: <%= format_date(@subscription.current_period_end.to_date) %>
+<% end %>
+
+You now have unlimited class access. Start booking!
+
+Browse classes: <%= classes_url %>

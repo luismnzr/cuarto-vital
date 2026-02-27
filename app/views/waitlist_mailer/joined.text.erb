@@ -1,0 +1,12 @@
+You're on the Waitlist
+
+Hi <%= @user.first_name %>, you've been added to the waitlist.
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+Position: #<%= @entry.position %>
+
+We'll notify you immediately if a spot opens up. No credit will be charged until you're promoted from the waitlist.
+
+View waitlists: <%= profile_waitlists_url %>

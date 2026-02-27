@@ -1,0 +1,15 @@
+Reservation Cancelled
+
+Hi <%= @user.first_name %>, your reservation has been cancelled.
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+
+<% if @credit_restored %>
+Your class credit has been restored to your package.
+<% elsif @reservation.class_credit.present? %>
+This was a late cancellation. Your credit was not restored per our cancellation policy.
+<% end %>
+
+Browse classes: <%= classes_url %>

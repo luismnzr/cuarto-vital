@@ -1,0 +1,15 @@
+<div class="<%= css_classes %>"<%= tag.attributes(@extra_attrs) if @extra_attrs.any? %>>
+  <% if header? %>
+    <div class="px-6 py-4 border-b border-[var(--color-border)]">
+      <%= header %>
+    </div>
+  <% end %>
+  <div class="<%= 'p-6' if @padding %>">
+    <%= content %>
+  </div>
+  <% if footer? %>
+    <div class="px-6 py-4 border-t border-[var(--color-border)]">
+      <%= footer %>
+    </div>
+  <% end %>
+</div>

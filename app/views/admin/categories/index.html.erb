@@ -1,0 +1,31 @@
+<% content_for(:page_title) { "Categories" } %>
+<div class="flex items-center justify-between mb-6">
+  <p class="text-sm text-[var(--color-muted-foreground)]"><%= @categories.count %> categories</p>
+  <%= link_to "New Category", new_admin_category_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Name</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Description</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Order</th>
+        <th class="px-5 py-3 text-right font-medium text-[var(--color-muted-foreground)]">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @categories.each do |cat| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3 font-medium"><%= cat.name %></td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)] truncate max-w-xs"><%= cat.description %></td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= cat.sort_order %></td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "Edit", edit_admin_category_path(cat), class: "text-[var(--color-primary)] hover:underline font-medium" %>
+            <%= button_to admin_category_path(cat), method: :delete, data: { turbo_confirm: "Delete?" }, class: "text-[var(--color-destructive)] hover:underline ml-3 cursor-pointer" do %>Delete<% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

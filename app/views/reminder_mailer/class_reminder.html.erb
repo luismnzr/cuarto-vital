@@ -1,0 +1,23 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Class Reminder</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, your class is coming up soon!</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #eef2ff; border-radius: 8px; border: 1px solid #c7d2fe; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+        <%= email_detail_row("Teacher", @studio_class.teacher.full_name) %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<% if StudioSetting.get("studio_address").present? %>
+  <p style="margin: 0 0 0 0; font-size: 14px; color: #64748b; line-height: 1.5;">
+    <strong style="color: #0f172a;">Location:</strong> <%= StudioSetting.get("studio_address") %>
+  </p>
+<% end %>
+
+<%= email_button("View Class Details", class_url(@studio_class)) %>

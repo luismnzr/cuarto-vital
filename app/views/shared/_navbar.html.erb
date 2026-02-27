@@ -1,0 +1,66 @@
+<header class="sticky top-0 z-50 w-full border-b border-[var(--color-border)] bg-white/80 backdrop-blur-lg" data-controller="mobile-menu">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center gap-10">
+        <%= link_to root_path, class: "flex items-center gap-2" do %>
+          <div class="h-8 w-8 rounded-lg bg-[var(--color-primary)] flex items-center justify-center">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <span class="text-xl font-bold text-[var(--color-foreground)]"><%= StudioSetting.get("studio_name") %></span>
+        <% end %>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-1">
+          <%= link_to "Schedule", classes_path, class: "px-3 py-2 text-sm font-medium rounded-lg transition-colors #{current_page?(classes_path) ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/5' : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)]'}" %>
+          <%= link_to "Pricing", packages_path, class: "px-3 py-2 text-sm font-medium rounded-lg transition-colors #{current_page?(packages_path) ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/5' : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)]'}" %>
+          <%= link_to "About", about_path, class: "px-3 py-2 text-sm font-medium rounded-lg transition-colors #{current_page?(about_path) ? 'text-[var(--color-primary)] bg-[var(--color-primary)]/5' : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] hover:bg-[var(--color-muted)]'}" %>
+        </nav>
+      </div>
+
+      <!-- Desktop Auth -->
+      <div class="hidden md:flex items-center gap-3">
+        <% if user_signed_in? %>
+          <% if current_user.admin? %>
+            <%= link_to "Admin", admin_dashboard_path, class: "text-sm font-medium text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors" %>
+          <% elsif current_user.teacher? %>
+            <%= link_to "Teaching", teacher_dashboard_path, class: "text-sm font-medium text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors" %>
+          <% end %>
+          <%= link_to profile_path, class: "flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--color-muted)] transition-colors" do %>
+            <div class="h-7 w-7 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
+              <span class="text-xs font-medium text-white"><%= current_user.first_name[0] %><%= current_user.last_name[0] %></span>
+            </div>
+            <span class="text-sm font-medium"><%= current_user.first_name %></span>
+          <% end %>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors" %>
+        <% else %>
+          <%= link_to "Log in", new_user_session_path, class: "text-sm font-medium text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors" %>
+          <%= link_to "Get Started", new_user_registration_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm" %>
+        <% end %>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]" data-action="mobile-menu#toggle">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="hidden md:hidden border-t border-[var(--color-border)] bg-white" data-mobile-menu-target="menu">
+    <div class="px-4 py-4 space-y-1">
+      <%= link_to "Schedule", classes_path, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)]" %>
+      <%= link_to "Pricing", packages_path, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)]" %>
+      <%= link_to "About", about_path, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)]" %>
+      <div class="border-t border-[var(--color-border)] my-2 pt-2">
+        <% if user_signed_in? %>
+          <%= link_to "My Profile", profile_path, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)]" %>
+          <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)] text-[var(--color-destructive)]" %>
+        <% else %>
+          <%= link_to "Log in", new_user_session_path, class: "block px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-[var(--color-muted)]" %>
+          <%= link_to "Get Started", new_user_registration_path, class: "block px-3 py-2.5 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg text-center" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</header>

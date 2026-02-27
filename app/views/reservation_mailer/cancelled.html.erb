@@ -1,0 +1,36 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Reservation Cancelled</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, your reservation has been cancelled.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<% if @credit_restored %>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; margin-bottom: 24px;">
+    <tr>
+      <td style="padding: 16px 20px; font-size: 14px; color: #166534;">
+        &#10003; Your class credit has been restored to your package.
+      </td>
+    </tr>
+  </table>
+<% else %>
+  <% if @reservation.class_credit.present? %>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef9ee; border-radius: 8px; border: 1px solid #fde68a; margin-bottom: 24px;">
+      <tr>
+        <td style="padding: 16px 20px; font-size: 14px; color: #92400e;">
+          This was a late cancellation. Your credit was not restored per our cancellation policy.
+        </td>
+      </tr>
+    </table>
+  <% end %>
+<% end %>
+
+<%= email_button("Browse Classes", classes_url) %>

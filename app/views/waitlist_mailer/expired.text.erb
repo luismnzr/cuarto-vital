@@ -1,0 +1,11 @@
+Waitlist Expired
+
+Hi <%= @user.first_name %>, unfortunately a spot didn't open up for the following class.
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+
+No credit was charged. We hope to see you at another class soon!
+
+Browse classes: <%= classes_url %>

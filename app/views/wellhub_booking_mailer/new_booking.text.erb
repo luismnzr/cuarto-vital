@@ -1,0 +1,11 @@
+New Wellhub Booking
+
+A new booking has been received from Wellhub and automatically accepted.
+
+Booking #: <%= @booking.booking_number %>
+Gympass ID: <%= @booking.gympass_id %>
+Class: <%= @studio_class.name %>
+Date: <%= @studio_class.date.strftime("%b %d, %Y") %>
+Time: <%= @studio_class.start_time.strftime("%l:%M %p").strip %>
+Teacher: <%= @studio_class.teacher.full_name %>
+Spots Remaining: <%= @studio_class.spots_remaining %> / <%= @studio_class.capacity %>

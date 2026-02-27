@@ -1,0 +1,13 @@
+You're In!
+
+Hi <%= @user.first_name %>, great news — a spot opened up and you've been moved off the waitlist!
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+Teacher: <%= @studio_class.teacher.full_name %>
+Status: Confirmed
+
+A class credit has been deducted from your package. See you in class!
+
+View your classes: <%= profile_classes_url %>

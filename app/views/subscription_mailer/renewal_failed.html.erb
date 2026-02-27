@@ -1,0 +1,18 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Payment Failed</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, we were unable to process your subscription payment.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef2f2; border-radius: 8px; border: 1px solid #fecaca; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Plan", @plan.name) %>
+        <%= email_detail_row("Amount", "#{format_currency(@plan.price)}/#{@plan.interval}") %>
+        <%= email_detail_row("Status", "Payment Failed") %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 0 0; font-size: 14px; color: #64748b; line-height: 1.5;">Please update your payment method to continue your subscription and avoid losing access to classes.</p>
+
+<%= email_button("Update Payment Method", profile_billing_url, color: "#ef4444") %>

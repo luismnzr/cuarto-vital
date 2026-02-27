@@ -1,0 +1,25 @@
+<% content_for(:title) { "Terms & Conditions" } %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
+  <h1 class="text-3xl font-bold mb-8">Terms & Conditions</h1>
+
+  <%= render Ui::CardComponent.new do %>
+    <div class="prose max-w-none text-[var(--color-muted-foreground)] space-y-6">
+      <h2 class="text-xl font-semibold text-[var(--color-foreground)]">Cancellation Policy</h2>
+      <p>
+        Reservations may be cancelled up to <%= StudioSetting.cancellation_window_hours %> hours before class start time.
+        Late cancellations will result in forfeiture of the class credit.
+      </p>
+      <h2 class="text-xl font-semibold text-[var(--color-foreground)]">Packages</h2>
+      <p>
+        Class packages expire based on their specified duration from the date of purchase.
+        Unused credits are non-refundable and non-transferable.
+      </p>
+      <h2 class="text-xl font-semibold text-[var(--color-foreground)]">Subscriptions</h2>
+      <p>
+        Subscriptions auto-renew at the end of each billing period. You can manage or cancel
+        your subscription at any time through your account settings.
+      </p>
+    </div>
+  <% end %>
+</div>

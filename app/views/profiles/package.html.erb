@@ -1,0 +1,53 @@
+<% content_for(:title) { "My Package" } %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-2xl font-bold mb-8">My Package</h1>
+
+  <% if @user_package %>
+    <%= render Ui::CardComponent.new do %>
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-lg font-semibold"><%= @user_package.package.name %></h2>
+          <p class="text-[var(--color-muted-foreground)]"><%= @user_package.package.description %></p>
+        </div>
+        <%= render Ui::BadgeComponent.new(text: @user_package.status.titleize, variant: @user_package.status == "active" ? :success : :secondary) %>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-6">
+        <div>
+          <p class="text-sm text-[var(--color-muted-foreground)]">Credits Remaining</p>
+          <p class="text-2xl font-bold"><%= @user_package.credits_remaining %></p>
+        </div>
+        <div>
+          <p class="text-sm text-[var(--color-muted-foreground)]">Purchased</p>
+          <p class="font-medium"><%= @user_package.purchased_at.strftime("%B %d, %Y") %></p>
+        </div>
+        <div>
+          <p class="text-sm text-[var(--color-muted-foreground)]">Expires</p>
+          <p class="font-medium"><%= @user_package.expires_at.strftime("%B %d, %Y") %></p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <%= render Ui::CardComponent.new do %>
+      <div class="text-center py-8">
+        <p class="text-[var(--color-muted-foreground)] mb-4">You don't have an active package.</p>
+        <%= render Ui::ButtonComponent.new(href: packages_path) do %>Browse Packages<% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if @package_history.any? %>
+    <h2 class="text-lg font-semibold mt-10 mb-4">Purchase History</h2>
+    <div class="space-y-2">
+      <% @package_history.each do |up| %>
+        <div class="flex items-center justify-between py-3 border-b border-[var(--color-border)]">
+          <div>
+            <p class="font-medium"><%= up.package.name %></p>
+            <p class="text-sm text-[var(--color-muted-foreground)]">Purchased <%= up.purchased_at.strftime("%B %d, %Y") %></p>
+          </div>
+          <%= render Ui::BadgeComponent.new(text: up.status.titleize, variant: up.status == "active" ? :success : :secondary) %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

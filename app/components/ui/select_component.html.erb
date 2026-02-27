@@ -1,0 +1,26 @@
+<div class="space-y-1.5">
+  <% if @label %>
+    <label for="<%= @extra_attrs[:id] || @name %>" class="block text-sm font-medium text-[var(--color-foreground)]">
+      <%= @label %><%= " *" if @required %>
+    </label>
+  <% end %>
+  <select
+    name="<%= @name %>"
+    id="<%= @extra_attrs[:id] || @name %>"
+    class="flex h-10 w-full rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 <%= 'border-[var(--color-destructive)]' if @error %>"
+    <% if @required %>required<% end %>
+    <% if @disabled %>disabled<% end %>
+    <% attrs = @extra_attrs.except(:id); %><%= tag.attributes(attrs) if attrs.any? %>
+  >
+    <% if @include_blank %>
+      <option value=""><%= @include_blank.is_a?(String) ? @include_blank : "" %></option>
+    <% end %>
+    <% @options_list.each do |option| %>
+      <% value, label = option.is_a?(Array) ? [option.last, option.first] : [option, option] %>
+      <option value="<%= value %>" <%= "selected" if @selected.to_s == value.to_s %>><%= label %></option>
+    <% end %>
+  </select>
+  <% if @error %>
+    <p class="text-xs text-[var(--color-destructive)]"><%= @error %></p>
+  <% end %>
+</div>

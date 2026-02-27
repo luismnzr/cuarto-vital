@@ -1,0 +1,19 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">You're on the Waitlist</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, you've been added to the waitlist.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+        <%= email_detail_row("Position", "##{@entry.position}") %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 0 0; font-size: 14px; color: #64748b; line-height: 1.5;">We'll notify you immediately if a spot opens up. No credit will be charged until you're promoted from the waitlist.</p>
+
+<%= email_button("View Waitlists", profile_waitlists_url) %>

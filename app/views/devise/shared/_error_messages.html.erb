@@ -1,0 +1,9 @@
+<% if resource.errors.any? %>
+  <%= render Ui::AlertComponent.new(variant: :destructive, title: "#{pluralize(resource.errors.count, 'error')} prevented this action:") do %>
+    <ul class="list-disc list-inside mt-1">
+      <% resource.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

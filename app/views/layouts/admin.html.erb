@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <title>Admin — <%= content_for(:title) || StudioSetting.get("studio_name") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="h-full bg-[var(--color-secondary)] text-[var(--color-foreground)]" style="font-family: var(--font-sans);">
+    <div class="flex h-full">
+      <%# Sidebar %>
+      <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-[var(--color-border)]">
+        <div class="flex items-center gap-2 h-16 px-5 border-b border-[var(--color-border)]">
+          <div class="h-8 w-8 rounded-lg bg-[var(--color-primary)] flex items-center justify-center">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <span class="text-lg font-bold text-[var(--color-foreground)]"><%= StudioSetting.get("studio_name") %></span>
+        </div>
+        <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+          <%= admin_nav_link "Dashboard", admin_dashboard_path, "dashboard" %>
+          <%= admin_nav_link "Users", admin_users_path, "users" %>
+          <%= admin_nav_link "Classes", admin_classes_path, "classes" %>
+          <%= admin_nav_link "Templates", admin_class_templates_path, "templates" %>
+          <%= admin_nav_link "Categories", admin_categories_path, "categories" %>
+          <%= admin_nav_link "Packages", admin_packages_path, "packages" %>
+          <%= admin_nav_link "Subscriptions", admin_subscription_plans_path, "subscriptions" %>
+          <%= admin_nav_link "Reservations", admin_reservations_path, "reservations" %>
+          <div class="pt-4 mt-4 border-t border-[var(--color-border)]">
+            <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]/60">Shop</p>
+            <%= admin_nav_link "Products", admin_products_path, "products" %>
+            <%= admin_nav_link "Orders", admin_orders_path, "orders" %>
+          </div>
+          <div class="pt-4 mt-4 border-t border-[var(--color-border)]">
+            <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]/60">Integrations</p>
+            <%= admin_nav_link "Check-ins", admin_external_checkins_path, "checkins" %>
+            <%= admin_nav_link "Wellhub", admin_wellhub_bookings_path, "wellhub" %>
+          </div>
+          <div class="pt-4 mt-4 border-t border-[var(--color-border)]">
+            <%= admin_nav_link "Settings", admin_settings_path, "settings" %>
+            <%= admin_nav_link "Reports", admin_reports_path, "reports" %>
+          </div>
+        </nav>
+        <div class="p-4 border-t border-[var(--color-border)]">
+          <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center">
+              <span class="text-xs font-medium text-white"><%= current_user.first_name[0] %><%= current_user.last_name[0] %></span>
+            </div>
+            <div class="text-sm min-w-0">
+              <p class="font-medium truncate text-[var(--color-foreground)]"><%= current_user.full_name %></p>
+              <p class="text-xs text-[var(--color-muted-foreground)]">Administrator</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <%# Main content %>
+      <div class="lg:pl-64 flex flex-col flex-1">
+        <header class="sticky top-0 z-40 flex items-center justify-between h-16 px-6 border-b border-[var(--color-border)] bg-white/80 backdrop-blur-lg">
+          <div class="flex items-center gap-4">
+            <button class="lg:hidden p-2 rounded-lg hover:bg-[var(--color-muted)]" data-controller="mobile-menu" data-action="mobile-menu#toggle">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <h1 class="text-lg font-semibold text-[var(--color-foreground)]"><%= yield :page_title %></h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <%= link_to root_path, class: "inline-flex items-center gap-1.5 text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors" do %>
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              View Site
+            <% end %>
+            <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] transition-colors" %>
+          </div>
+        </header>
+
+        <%= render "shared/flash" %>
+
+        <main class="flex-1 p-6">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

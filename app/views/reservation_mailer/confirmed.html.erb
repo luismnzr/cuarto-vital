@@ -1,0 +1,24 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Reservation Confirmed</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, you're all set for class!</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+        <%= email_detail_row("Teacher", @studio_class.teacher.full_name) %>
+        <% if @studio_class.category.present? %>
+          <%= email_detail_row("Category", @studio_class.category.name) %>
+        <% end %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 8px 0; font-size: 13px; color: #94a3b8; line-height: 1.5;">
+  <strong style="color: #64748b;">Cancellation policy:</strong> Cancel at least <%= cancellation_window %> hours before class to receive a full credit refund.
+</p>
+
+<%= email_button("View My Classes", profile_classes_url) %>

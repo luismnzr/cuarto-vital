@@ -1,0 +1,52 @@
+<% content_for(:page_title) { "Class Templates" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <p class="text-sm text-[var(--color-muted-foreground)]"><%= @class_templates.count %> templates</p>
+  <%= link_to "New Template", new_admin_class_template_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Name</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Category</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Schedule</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Duration</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Capacity</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Status</th>
+        <th class="px-5 py-3 text-right font-medium text-[var(--color-muted-foreground)]">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @class_templates.each do |template| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3">
+            <p class="font-medium"><%= template.name %></p>
+            <p class="text-xs text-[var(--color-muted-foreground)]"><%= template.display_level %></p>
+          </td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= template.category.name %></td>
+          <td class="px-5 py-3">
+            <% if template.scheduled? %>
+              <p class="text-[var(--color-foreground)]"><%= template.display_day %>s <%= template.default_start_time.strftime("%l:%M %p").strip %></p>
+              <p class="text-xs text-[var(--color-muted-foreground)]"><%= template.teacher.full_name %></p>
+            <% else %>
+              <span class="text-[var(--color-muted-foreground)]">&mdash;</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= template.default_duration %> min</td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= template.default_capacity %></td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= template.active? ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-700' %>">
+              <%= template.active? ? "Active" : "Inactive" %>
+            </span>
+          </td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "Edit", edit_admin_class_template_path(template), class: "text-[var(--color-primary)] hover:underline font-medium" %>
+            <%= button_to admin_class_template_path(template), method: :delete, data: { turbo_confirm: "Delete this template?" }, class: "text-[var(--color-destructive)] hover:underline ml-3 cursor-pointer" do %>Delete<% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

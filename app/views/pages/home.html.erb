@@ -1,0 +1,123 @@
+<% content_for(:title) { StudioSetting.get("studio_name") } %>
+
+<%# Hero Section with gradient %>
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
+  <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-36">
+    <div class="max-w-2xl">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white mb-6">
+        <svg class="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+        Now booking · <%= StudioClass.scheduled.upcoming.count %> classes available
+      </span>
+      <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        Move your body,<br>free your mind
+      </h1>
+      <p class="mt-6 text-lg text-white/80 max-w-lg">
+        Join our community and discover classes that transform. Yoga, pilates, meditation, and more — all in one place.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <%= link_to classes_path, class: "inline-flex items-center px-6 py-3 text-sm font-semibold text-[var(--color-primary)] bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-lg" do %>
+          Browse Classes
+          <svg class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        <% end %>
+        <%= link_to "View Pricing", packages_path, class: "inline-flex items-center px-6 py-3 text-sm font-semibold text-white border border-white/30 rounded-lg hover:bg-white/10 transition-colors" %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# Feature highlights %>
+<section class="relative -mt-12 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
+      <div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center mb-4">
+        <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      </div>
+      <h3 class="font-semibold text-[var(--color-foreground)]">Easy Booking</h3>
+      <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">Browse the schedule and reserve your spot in seconds. Get waitlisted when classes are full.</p>
+    </div>
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
+      <div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center mb-4">
+        <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 class="font-semibold text-[var(--color-foreground)]">Flexible Packages</h3>
+      <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">Class packs or unlimited subscriptions — choose what works for your lifestyle and budget.</p>
+    </div>
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6 shadow-lg">
+      <div class="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center mb-4">
+        <svg class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <h3 class="font-semibold text-[var(--color-foreground)]">Expert Teachers</h3>
+      <p class="mt-1 text-sm text-[var(--color-muted-foreground)]">Learn from certified instructors who are passionate about helping you grow and thrive.</p>
+    </div>
+  </div>
+</section>
+
+<%# Upcoming Classes %>
+<section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+  <div class="flex items-end justify-between mb-8">
+    <div>
+      <h2 class="text-2xl font-bold text-[var(--color-foreground)]">Upcoming Classes</h2>
+      <p class="text-[var(--color-muted-foreground)] mt-1">Find your next session and reserve your spot</p>
+    </div>
+    <%= link_to classes_path, class: "hidden sm:inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors" do %>
+      View full schedule
+      <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <% StudioClass.scheduled.upcoming.includes(class_template: :category, teacher: []).order(:date, :start_time).limit(6).each do |studio_class| %>
+      <%= link_to class_path(studio_class), class: "group block" do %>
+        <div class="bg-white rounded-xl border border-[var(--color-border)] p-5 hover:shadow-md hover:border-[var(--color-primary)]/30 transition-all">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <p class="text-xs font-medium text-[var(--color-primary)] uppercase tracking-wider"><%= studio_class.category.name %></p>
+              <h3 class="font-semibold text-[var(--color-foreground)] mt-0.5 group-hover:text-[var(--color-primary)] transition-colors"><%= studio_class.name %></h3>
+            </div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= studio_class.full? ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700' %>">
+              <%= studio_class.full? ? "Full" : "#{studio_class.spots_remaining} spots" %>
+            </span>
+          </div>
+          <div class="flex items-center gap-3 text-sm text-[var(--color-muted-foreground)]">
+            <span class="flex items-center gap-1">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <%= studio_class.start_time.strftime("%l:%M %p").strip %>
+            </span>
+            <span>&middot;</span>
+            <span><%= studio_class.duration %> min</span>
+            <span>&middot;</span>
+            <span><%= studio_class.teacher.full_name %></span>
+          </div>
+          <div class="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--color-border)]">
+            <svg class="h-3.5 w-3.5 text-[var(--color-muted-foreground)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span class="text-sm text-[var(--color-muted-foreground)]"><%= studio_class.date.strftime("%A, %B %d") %></span>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="mt-8 text-center sm:hidden">
+    <%= link_to classes_path, class: "inline-flex items-center text-sm font-medium text-[var(--color-primary)]" do %>
+      View full schedule
+      <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    <% end %>
+  </div>
+</section>
+
+<%# CTA Section %>
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-black"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <h2 class="text-3xl font-bold text-white">Ready to start your journey?</h2>
+    <p class="text-white/80 mt-3 max-w-xl mx-auto">
+      Choose a class package or unlimited subscription that fits your lifestyle. Your first class is on us.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <%= link_to "View Pricing", packages_path, class: "inline-flex items-center px-6 py-3 text-sm font-semibold text-[var(--color-primary)] bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-lg" %>
+      <%= link_to "Browse Classes", classes_path, class: "inline-flex items-center px-6 py-3 text-sm font-semibold text-white border border-white/30 rounded-lg hover:bg-white/10 transition-colors" %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,76 @@
+<% content_for(:page_title) { "Reservations" } %>
+<div class="flex items-center justify-between mb-6">
+  <h2 class="text-lg font-semibold">Reservations</h2>
+</div>
+
+<!-- Status filter tabs -->
+<div class="flex items-center gap-1 mb-6 border-b border-[var(--color-border)]">
+  <%= link_to "All", admin_reservations_path, class: "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors #{params[:status].blank? ? 'border-[var(--color-primary)] text-[var(--color-primary)]' : 'border-transparent text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'}" %>
+  <% %w[confirmed cancelled].each do |status| %>
+    <%= link_to status.capitalize, admin_reservations_path(status: status), class: "px-4 py-2.5 text-sm font-medium border-b-2 transition-colors #{params[:status] == status ? 'border-[var(--color-primary)] text-[var(--color-primary)]' : 'border-transparent text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'}" %>
+  <% end %>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full divide-y divide-[var(--color-border)]">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Student</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Class</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Date & Time</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Status</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Booked</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @reservations.each do |r| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3.5">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0">
+                <span class="text-xs font-medium text-[var(--color-primary)]"><%= r.user.first_name[0] %><%= r.user.last_name[0] %></span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-[var(--color-foreground)]"><%= r.user.full_name %></p>
+                <p class="text-xs text-[var(--color-muted-foreground)]"><%= r.user.email %></p>
+              </div>
+            </div>
+          </td>
+          <td class="px-5 py-3.5">
+            <p class="text-sm font-medium text-[var(--color-foreground)]"><%= r.studio_class.name %></p>
+            <p class="text-xs text-[var(--color-muted-foreground)]"><%= r.studio_class.teacher.full_name %></p>
+          </td>
+          <td class="px-5 py-3.5">
+            <p class="text-sm text-[var(--color-foreground)]"><%= r.studio_class.date.strftime("%b %d, %Y") %></p>
+            <p class="text-xs text-[var(--color-muted-foreground)]"><%= r.studio_class.start_time.strftime("%l:%M %p").strip %></p>
+          </td>
+          <td class="px-5 py-3.5">
+            <% status_classes = case r.status
+               when "confirmed" then "bg-emerald-50 text-emerald-700"
+               when "cancelled" then "bg-red-50 text-red-700"
+               else "bg-gray-100 text-gray-600"
+               end %>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= status_classes %>">
+              <%= r.status.capitalize %>
+              <% if r.respond_to?(:late_cancel?) && r.late_cancel? %>
+                <span class="ml-1 text-[10px]">(late)</span>
+              <% end %>
+            </span>
+          </td>
+          <td class="px-5 py-3.5 text-xs text-[var(--color-muted-foreground)]"><%= time_ago_in_words(r.created_at) %> ago</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if @reservations.empty? %>
+    <div class="px-5 py-10 text-center">
+      <p class="text-sm text-[var(--color-muted-foreground)]">No reservations found.</p>
+    </div>
+  <% end %>
+</div>
+
+<% if defined?(@pagy) && @pagy.pages > 1 %>
+  <div class="mt-6 flex justify-center">
+    <%== @pagy.series_nav %>
+  </div>
+<% end %>

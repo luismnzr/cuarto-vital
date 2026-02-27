@@ -1,0 +1,18 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">New Wellhub Booking</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">A new booking has been received from Wellhub and automatically accepted.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Booking #", @booking.booking_number) %>
+        <%= email_detail_row("Gympass ID", @booking.gympass_id) %>
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+        <%= email_detail_row("Teacher", @studio_class.teacher.full_name) %>
+        <%= email_detail_row("Spots Remaining", "#{@studio_class.spots_remaining} / #{@studio_class.capacity}") %>
+      </table>
+    </td>
+  </tr>
+</table>

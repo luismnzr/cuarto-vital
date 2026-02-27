@@ -1,0 +1,69 @@
+<% content_for(:page_title) { "Users" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-3">
+    <% %w[all student teacher admin].each do |role| %>
+      <% active = (role == "all" && params[:role].blank?) || params[:role] == role %>
+      <%= link_to admin_users_path(role: role == "all" ? nil : role),
+            class: "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors #{active ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]'}" do %>
+        <%= role.titleize %><%= role == "all" ? "s" : "s" %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="flex items-center gap-3">
+    <p class="text-sm text-[var(--color-muted-foreground)]"><%= @pagy.count %> users</p>
+    <%= link_to "New User", new_admin_user_path, class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">User</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Email</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Role</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Status</th>
+        <th class="px-5 py-3 text-left font-medium text-[var(--color-muted-foreground)]">Joined</th>
+        <th class="px-5 py-3 text-right font-medium text-[var(--color-muted-foreground)]">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @users.each do |user| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0">
+                <span class="text-xs font-medium text-[var(--color-primary)]"><%= user.first_name[0] %><%= user.last_name[0] %></span>
+              </div>
+              <span class="font-medium text-[var(--color-foreground)]"><%= user.full_name %></span>
+            </div>
+          </td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= user.email %></td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                        <%= case user.role; when 'admin' then 'bg-purple-50 text-purple-700'; when 'teacher' then 'bg-blue-50 text-blue-700'; else 'bg-gray-100 text-gray-700'; end %>">
+              <%= user.role.titleize %>
+            </span>
+          </td>
+          <td class="px-5 py-3">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium <%= user.active? ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700' %>">
+              <%= user.active? ? "Active" : "Inactive" %>
+            </span>
+          </td>
+          <td class="px-5 py-3 text-[var(--color-muted-foreground)]"><%= user.created_at.strftime("%b %d, %Y") %></td>
+          <td class="px-5 py-3 text-right">
+            <%= link_to "View", admin_user_path(user), class: "text-[var(--color-primary)] hover:underline font-medium" %>
+            <%= link_to "Edit", edit_admin_user_path(user), class: "text-[var(--color-muted-foreground)] hover:underline ml-3" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <div class="flex justify-center mt-6">
+    <%== @pagy.series_nav %>
+  </div>
+<% end %>

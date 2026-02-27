@@ -1,0 +1,13 @@
+Class Reminder
+
+Hi <%= @user.first_name %>, your class is coming up soon!
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+Teacher: <%= @studio_class.teacher.full_name %>
+<% if StudioSetting.get("studio_address").present? %>
+Location: <%= StudioSetting.get("studio_address") %>
+<% end %>
+
+View class details: <%= class_url(@studio_class) %>

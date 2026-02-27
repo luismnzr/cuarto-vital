@@ -1,0 +1,71 @@
+<% content_for(:page_title) { "External Check-ins" } %>
+<div class="flex items-center justify-between mb-6">
+  <h2 class="text-lg font-semibold">WellHub / Fitpass Check-ins</h2>
+  <%= link_to new_admin_external_checkin_path, class: "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors" do %>
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+    Record Check-in
+  <% end %>
+</div>
+
+<%# Platform filter tabs %>
+<div class="flex items-center gap-2 mb-4">
+  <%= link_to "All", admin_external_checkins_path,
+        class: "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors #{params[:platform].blank? ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]'}" %>
+  <%= link_to "WellHub", admin_external_checkins_path(platform: "wellhub"),
+        class: "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors #{params[:platform] == 'wellhub' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]'}" %>
+  <%= link_to "Fitpass", admin_external_checkins_path(platform: "fitpass"),
+        class: "px-3 py-1.5 text-sm font-medium rounded-lg transition-colors #{params[:platform] == 'fitpass' ? 'bg-[var(--color-primary)] text-white' : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]'}" %>
+</div>
+
+<div class="bg-white rounded-xl border border-[var(--color-border)] overflow-hidden">
+  <table class="w-full divide-y divide-[var(--color-border)]">
+    <thead class="bg-[var(--color-muted)]/50">
+      <tr>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">User ID</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Platform</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Class</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Checked In</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Reference</th>
+        <th class="px-5 py-3 text-left text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider">Validated</th>
+        <th class="px-5 py-3 text-right text-xs font-medium text-[var(--color-muted-foreground)] uppercase tracking-wider"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-[var(--color-border)]">
+      <% @checkins.each do |checkin| %>
+        <tr class="hover:bg-[var(--color-muted)]/30">
+          <td class="px-5 py-3.5 text-sm font-medium text-[var(--color-foreground)]"><%= checkin.user_identifier %></td>
+          <td class="px-5 py-3.5">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                        <%= checkin.platform == 'wellhub' ? 'bg-purple-50 text-purple-700' : 'bg-orange-50 text-orange-700' %>">
+              <%= checkin.platform.titleize %>
+            </span>
+          </td>
+          <td class="px-5 py-3.5 text-sm text-[var(--color-foreground)]">
+            <p class="font-medium"><%= checkin.studio_class.name %></p>
+            <p class="text-xs text-[var(--color-muted-foreground)]"><%= checkin.studio_class.date.strftime("%b %d") %> at <%= checkin.studio_class.start_time.strftime("%l:%M %p").strip %></p>
+          </td>
+          <td class="px-5 py-3.5 text-sm text-[var(--color-muted-foreground)]"><%= checkin.checked_in_at.strftime("%b %d, %Y %l:%M %p") %></td>
+          <td class="px-5 py-3.5 text-sm text-[var(--color-muted-foreground)]"><%= checkin.external_reference_id.presence || "—" %></td>
+          <td class="px-5 py-3.5">
+            <% if checkin.validated? %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Validated</span>
+            <% else %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">Pending</span>
+            <% end %>
+          </td>
+          <td class="px-5 py-3.5 text-right">
+            <% unless checkin.validated? %>
+              <%= button_to "Validate", validate_admin_external_checkin_path(checkin), method: :patch,
+                    class: "text-sm text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-medium cursor-pointer" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if @checkins.empty? %>
+    <div class="px-5 py-10 text-center">
+      <p class="text-sm text-[var(--color-muted-foreground)]">No external check-ins recorded yet.</p>
+    </div>
+  <% end %>
+</div>

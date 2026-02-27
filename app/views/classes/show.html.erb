@@ -1,0 +1,135 @@
+<% content_for(:title) { @studio_class.name } %>
+
+<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8">
+  <%= link_to "&larr; Back to Schedule".html_safe, classes_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] mb-4 inline-block" %>
+
+  <%= render Ui::CardComponent.new do %>
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold"><%= @studio_class.name %></h1>
+        <p class="text-[var(--color-muted-foreground)] mt-1">with <%= @studio_class.teacher.full_name %></p>
+      </div>
+      <div class="flex gap-2">
+        <%= render Ui::BadgeComponent.new(text: @studio_class.category.name, variant: :secondary) %>
+        <%= render Ui::BadgeComponent.new(text: @studio_class.class_template.display_level, variant: :outline) %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+      <div>
+        <span class="text-[var(--color-muted-foreground)]">Date</span>
+        <p class="font-medium"><%= @studio_class.date.strftime("%A, %B %d, %Y") %></p>
+      </div>
+      <div>
+        <span class="text-[var(--color-muted-foreground)]">Time</span>
+        <p class="font-medium"><%= @studio_class.start_time.strftime("%l:%M %p").strip %> — <%= @studio_class.end_time.strftime("%l:%M %p").strip %></p>
+      </div>
+      <div>
+        <span class="text-[var(--color-muted-foreground)]">Duration</span>
+        <p class="font-medium"><%= @studio_class.duration %> minutes</p>
+      </div>
+      <div>
+        <span class="text-[var(--color-muted-foreground)]">Availability</span>
+        <%= turbo_frame_tag "spots-#{@studio_class.id}" do %>
+          <p class="font-medium <%= @studio_class.full? ? 'text-[var(--color-destructive)]' : 'text-[var(--color-success)]' %>">
+            <%= @studio_class.full? ? "Class Full" : "#{@studio_class.spots_remaining} of #{@studio_class.capacity} spots available" %>
+          </p>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @studio_class.description.present? %>
+      <div class="mb-6">
+        <h2 class="font-semibold mb-2">About this class</h2>
+        <p class="text-sm text-[var(--color-muted-foreground)]"><%= @studio_class.description %></p>
+      </div>
+    <% end %>
+
+    <!-- Reservation Actions -->
+    <div class="pt-4 border-t border-[var(--color-border)]">
+      <% if user_signed_in? %>
+        <% existing_reservation = current_user.reservations.confirmed.find_by(studio_class: @studio_class) %>
+        <% waitlist_entry = current_user.waitlist_entries.pending.find_by(studio_class: @studio_class) %>
+
+        <% if existing_reservation %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-[var(--color-success)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-sm font-medium text-[var(--color-success)]">You're booked for this class</span>
+            </div>
+            <%= button_to reservation_path(existing_reservation), method: :delete,
+                  data: { turbo: false, turbo_confirm: "Are you sure you want to cancel this reservation?" },
+                  class: "inline-flex items-center px-4 py-2 text-sm font-medium text-[var(--color-destructive)] border border-[var(--color-destructive)]/30 rounded-lg hover:bg-[var(--color-destructive)]/5 transition-colors cursor-pointer" do %>
+              Cancel Reservation
+            <% end %>
+          </div>
+
+          <% if @studio_class.starts_at && (@studio_class.starts_at - Time.current < StudioSetting.cancellation_window_hours.hours) %>
+            <p class="text-xs text-[var(--color-warning)] mt-2">
+              <svg class="h-3.5 w-3.5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              Late cancellation — your credit will not be restored.
+            </p>
+          <% end %>
+
+        <% elsif waitlist_entry %>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-[var(--color-warning)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="text-sm font-medium">You're #<%= waitlist_entry.position %> on the waitlist</span>
+            </div>
+            <%= button_to waitlist_entry_path(waitlist_entry), method: :delete,
+                  data: { turbo: false, turbo_confirm: "Are you sure you want to leave the waitlist?" },
+                  class: "inline-flex items-center px-4 py-2 text-sm font-medium text-[var(--color-muted-foreground)] border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-muted)] transition-colors cursor-pointer" do %>
+              Leave Waitlist
+            <% end %>
+          </div>
+
+        <% elsif @studio_class.full? %>
+          <% if StudioSetting.waitlist_enabled? && @studio_class.waitlist_count < StudioSetting.max_waitlist_size %>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-[var(--color-destructive)]">This class is full</p>
+                <p class="text-xs text-[var(--color-muted-foreground)] mt-1"><%= @studio_class.waitlist_count %> / <%= StudioSetting.max_waitlist_size %> waitlist spots taken</p>
+              </div>
+              <%= button_to class_waitlist_entries_path(@studio_class), method: :post,
+                    data: { turbo: false },
+                    class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm cursor-pointer" do %>
+                Join Waitlist
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-sm text-[var(--color-destructive)]">This class is full and the waitlist is closed.</p>
+          <% end %>
+
+        <% elsif current_user.can_reserve? %>
+          <div class="flex items-center justify-between">
+            <div>
+              <% if current_user.has_active_subscription? %>
+                <p class="text-xs text-[var(--color-muted-foreground)]">Booking with your unlimited subscription</p>
+              <% elsif current_user.has_available_credits? %>
+                <p class="text-xs text-[var(--color-muted-foreground)]">1 credit will be deducted (<%= current_user.active_package.credits_remaining %> remaining)</p>
+              <% end %>
+            </div>
+            <%= button_to class_reservations_path(@studio_class), method: :post,
+                  data: { turbo: false },
+                  class: "inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm cursor-pointer" do %>
+              Reserve Spot
+            <% end %>
+          </div>
+
+        <% else %>
+          <div class="text-center py-2">
+            <p class="text-sm text-[var(--color-muted-foreground)] mb-3">You need an active package or subscription to book this class.</p>
+            <%= link_to "View Packages", packages_path,
+                  class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-sm text-[var(--color-muted-foreground)]">
+          <%= link_to "Log in", new_user_session_path, class: "font-medium text-[var(--color-primary)] hover:underline" %> or
+          <%= link_to "sign up", new_user_registration_path, class: "font-medium text-[var(--color-primary)] hover:underline" %> to reserve your spot.
+        </p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

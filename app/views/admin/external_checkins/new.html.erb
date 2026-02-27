@@ -1,0 +1,53 @@
+<% content_for(:page_title) { "Record Check-in" } %>
+<div class="max-w-2xl">
+  <%= link_to "&larr; Back".html_safe, admin_external_checkins_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] mb-4 inline-block" %>
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <h2 class="text-lg font-semibold mb-6">Record External Check-in</h2>
+
+    <%= form_with(model: [:admin, @checkin], class: "space-y-5") do |f| %>
+      <% if @checkin.errors.any? %>
+        <div class="p-4 rounded-lg bg-red-50 text-red-700 text-sm">
+          <ul class="list-disc pl-5 space-y-1"><% @checkin.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :platform, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+        <%= f.select :platform, [["WellHub", "wellhub"], ["Fitpass", "fitpass"]],
+              {}, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+      </div>
+
+      <div>
+        <%= f.label :user_identifier, "User ID / Name", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+        <%= f.text_field :user_identifier, placeholder: "e.g. WellHub member ID or name",
+              class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+      </div>
+
+      <div>
+        <%= f.label :studio_class_id, "Class", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+        <%= f.collection_select :studio_class_id, @classes, :id,
+              ->(c) { "#{c.name} — #{c.date.strftime('%b %d')} at #{c.start_time.strftime('%l:%M %p').strip}" },
+              { include_blank: "Select class..." },
+              class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :checked_in_at, "Check-in Time", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.datetime_local_field :checked_in_at,
+                class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+        <div>
+          <%= f.label :external_reference_id, "Reference ID (optional)", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.text_field :external_reference_id, placeholder: "External booking reference",
+                class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <%= f.submit "Record Check-in", class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors cursor-pointer" %>
+        <%= link_to "Cancel", admin_external_checkins_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+      </div>
+    <% end %>
+  </div>
+</div>

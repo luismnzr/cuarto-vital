@@ -1,0 +1,11 @@
+Your Package Expires Soon
+
+Hi <%= @user.first_name %>, your class package is expiring in 3 days.
+
+Package: <%= @package.name %>
+Remaining: <%= @user_package.credits_remaining %> credits
+Expires: <%= format_date(@user_package.expires_at.to_date) %>
+
+Use your remaining credits before they expire, or renew your package to keep them going.
+
+Renew package: <%= packages_url %>

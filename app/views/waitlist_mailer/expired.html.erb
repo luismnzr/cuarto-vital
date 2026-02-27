@@ -1,0 +1,18 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Waitlist Expired</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, unfortunately a spot didn't open up for the following class.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 0 0; font-size: 14px; color: #64748b; line-height: 1.5;">No credit was charged. We hope to see you at another class soon!</p>
+
+<%= email_button("Browse Classes", classes_url) %>

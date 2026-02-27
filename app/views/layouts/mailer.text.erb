@@ -1,0 +1,7 @@
+<%= yield %>
+
+--
+<%= StudioSetting.get("studio_name") %>
+<%= StudioSetting.get("studio_address") if StudioSetting.get("studio_address").present? %>
+<%= StudioSetting.get("studio_phone") if StudioSetting.get("studio_phone").present? %>
+<%= StudioSetting.get("studio_email") if StudioSetting.get("studio_email").present? %>

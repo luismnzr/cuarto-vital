@@ -1,0 +1,52 @@
+<%= form_with(model: studio_class, url: studio_class.persisted? ? admin_class_path(studio_class) : admin_classes_path, class: "space-y-5") do |f| %>
+  <% if studio_class.errors.any? %>
+    <div class="p-4 rounded-lg bg-red-50 text-red-700 text-sm">
+      <ul class="list-disc pl-5 space-y-1">
+        <% studio_class.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :class_template_id, "Class Template", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+    <%= f.collection_select :class_template_id, @class_templates, :id, :name, { prompt: "Select a template" }, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+  </div>
+
+  <div>
+    <%= f.label :teacher_id, "Teacher", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+    <%= f.collection_select :teacher_id, @teachers, :id, :full_name, { prompt: "Select a teacher" }, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <div>
+      <%= f.label :date, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+      <%= f.date_field :date, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+    </div>
+    <div>
+      <%= f.label :start_time, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+      <%= f.time_field :start_time, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+    </div>
+    <div>
+      <%= f.label :end_time, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+      <%= f.time_field :end_time, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :duration, "Duration (min)", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+      <%= f.number_field :duration, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+    </div>
+    <div>
+      <%= f.label :capacity, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+      <%= f.number_field :capacity, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 pt-2">
+    <%= f.submit class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors cursor-pointer" %>
+    <%= link_to "Cancel", admin_classes_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+  </div>
+<% end %>

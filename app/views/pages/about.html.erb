@@ -1,0 +1,25 @@
+<% content_for(:title) { "About" } %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
+  <h1 class="text-3xl font-bold mb-8">About Us</h1>
+
+  <%= render Ui::CardComponent.new do %>
+    <div class="prose max-w-none">
+      <p class="text-lg text-[var(--color-muted-foreground)]">
+        Welcome to <%= StudioSetting.get("studio_name") %>. We are a boutique fitness studio
+        dedicated to helping you find balance, strength, and peace through mindful movement.
+      </p>
+      <h2 class="text-xl font-semibold mt-8 mb-4">Our Mission</h2>
+      <p class="text-[var(--color-muted-foreground)]">
+        We believe that fitness is for everyone. Our classes are designed to meet you where you are,
+        whether you're a complete beginner or an experienced practitioner.
+      </p>
+      <h2 class="text-xl font-semibold mt-8 mb-4">Visit Us</h2>
+      <p class="text-[var(--color-muted-foreground)]">
+        <%= StudioSetting.get("studio_address") %><br>
+        <%= StudioSetting.get("studio_phone") %><br>
+        <%= StudioSetting.get("studio_email") %>
+      </p>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+<% content_for(:page_title) { "New Subscription Plan" } %>
+<div class="max-w-2xl">
+  <%= link_to "&larr; Back".html_safe, admin_subscription_plans_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] mb-4 inline-block" %>
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <h2 class="text-lg font-semibold mb-6">New Subscription Plan</h2>
+    <%= render "form", subscription_plan: @subscription_plan %>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<% content_for(:title) { "Pricing" } %>
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+  <!-- Header -->
+  <div class="text-center mb-12">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[var(--color-primary)]/10 text-[var(--color-primary)] mb-4">Pricing</span>
+    <h1 class="text-3xl font-bold text-[var(--color-foreground)]">Simple, transparent pricing</h1>
+    <p class="text-[var(--color-muted-foreground)] mt-3 max-w-xl mx-auto">
+      Choose the plan that fits your practice. All options include access to every class on the schedule.
+    </p>
+  </div>
+
+  <%# Class Packages %>
+  <% if @packages.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <% @packages.each_with_index do |package, index| %>
+        <% popular = index == 1 %>
+        <div class="relative bg-white rounded-2xl border-2 p-6 flex flex-col
+                    <%= popular ? 'border-[var(--color-primary)] shadow-xl' : 'border-[var(--color-border)]' %>">
+          <% if popular %>
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[var(--color-primary)] text-white shadow-sm">Most Popular</span>
+            </div>
+          <% end %>
+
+          <div class="text-center mb-6">
+            <h3 class="text-lg font-bold text-[var(--color-foreground)]"><%= package.name %></h3>
+            <div class="mt-4 flex items-baseline justify-center gap-1">
+              <span class="text-4xl font-bold text-[var(--color-foreground)]">$<%= number_with_precision(package.price, precision: 0) %></span>
+              <span class="text-sm text-[var(--color-muted-foreground)]">MXN</span>
+            </div>
+            <p class="text-sm text-[var(--color-muted-foreground)] mt-2"><%= package.credit_count %> classes &middot; Valid for <%= package.expiration_days %> days</p>
+          </div>
+
+          <div class="flex-1 mb-6">
+            <ul class="space-y-3">
+              <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+                <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Access to all class types
+              </li>
+              <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+                <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Book up to 7 days in advance
+              </li>
+              <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+                <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                Waitlist access when classes are full
+              </li>
+              <% if package.credit_count >= 10 %>
+                <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+                  <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Priority booking
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <% if user_signed_in? %>
+            <%= button_to checkout_package_path(package), method: :post,
+                  data: { turbo: false },
+                  class: "w-full h-10 flex items-center justify-center text-sm font-medium rounded-lg transition-colors cursor-pointer
+                          #{popular ? 'text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] shadow-sm' : 'text-[var(--color-foreground)] border border-[var(--color-border)] hover:bg-[var(--color-muted)]'}" do %>
+              Buy Package
+            <% end %>
+          <% else %>
+            <%= link_to new_user_registration_path, class: "w-full h-10 flex items-center justify-center text-sm font-medium rounded-lg transition-colors
+                                                            #{popular ? 'text-white bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] shadow-sm' : 'text-[var(--color-foreground)] border border-[var(--color-border)] hover:bg-[var(--color-muted)]'}" do %>
+              Get Started
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# Subscription Plans %>
+  <% if @subscription_plans.any? %>
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold text-[var(--color-foreground)]">Unlimited Subscriptions</h2>
+      <p class="text-[var(--color-muted-foreground)] mt-2">Unlimited classes for dedicated practitioners</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-16">
+      <% @subscription_plans.each do |plan| %>
+        <div class="bg-white rounded-2xl border border-[var(--color-border)] p-6">
+          <div class="text-center mb-6">
+            <h3 class="text-lg font-bold text-[var(--color-foreground)]"><%= plan.name %></h3>
+            <div class="mt-4 flex items-baseline justify-center gap-1">
+              <span class="text-4xl font-bold text-[var(--color-foreground)]">$<%= number_with_precision(plan.price, precision: 0) %></span>
+              <span class="text-sm text-[var(--color-muted-foreground)]">MXN/<%= plan.interval %></span>
+            </div>
+            <% if plan.description.present? %>
+              <p class="text-sm text-[var(--color-muted-foreground)] mt-2"><%= plan.description %></p>
+            <% end %>
+          </div>
+
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+              <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Unlimited classes per month
+            </li>
+            <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+              <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Priority booking on all sessions
+            </li>
+            <li class="flex items-center gap-2.5 text-sm text-[var(--color-foreground)]">
+              <svg class="h-4 w-4 text-[var(--color-success)] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              Cancel anytime
+            </li>
+          </ul>
+
+          <% if user_signed_in? %>
+              <%= button_to checkout_subscription_path(plan), method: :post,
+                    data: { turbo: false },
+                    class: "w-full h-10 flex items-center justify-center text-sm font-medium text-[var(--color-foreground)] border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-muted)] transition-colors cursor-pointer" do %>
+                Subscribe
+              <% end %>
+          <% else %>
+            <%= link_to "Get Started", new_user_registration_path, class: "w-full h-10 flex items-center justify-center text-sm font-medium text-[var(--color-foreground)] border border-[var(--color-border)] rounded-lg hover:bg-[var(--color-muted)] transition-colors" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# FAQ Section %>
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-xl font-bold text-[var(--color-foreground)] text-center mb-8">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      <div class="bg-white rounded-xl border border-[var(--color-border)] p-5">
+        <h3 class="font-semibold text-[var(--color-foreground)]">How do class credits work?</h3>
+        <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">Each class requires one credit. Credits are deducted when you book and returned if you cancel at least 4 hours before the class starts.</p>
+      </div>
+      <div class="bg-white rounded-xl border border-[var(--color-border)] p-5">
+        <h3 class="font-semibold text-[var(--color-foreground)]">Can I switch plans?</h3>
+        <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">Yes! You can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle.</p>
+      </div>
+      <div class="bg-white rounded-xl border border-[var(--color-border)] p-5">
+        <h3 class="font-semibold text-[var(--color-foreground)]">What is the cancellation policy?</h3>
+        <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">Cancel your reservation at least 4 hours before the class for a full credit refund. Late cancellations or no-shows will not be refunded.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="relative inline-block" data-controller="dropdown">
+  <div data-action="click->dropdown#toggle">
+    <%= trigger %>
+  </div>
+  <div data-dropdown-target="menu"
+       class="hidden absolute <%= @align == :right ? 'right-0' : 'left-0' %> z-50 mt-1 min-w-[12rem] rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-background)] p-1 shadow-[var(--shadow-md)]">
+    <% items.each do |item| %>
+      <%= item %>
+    <% end %>
+  </div>
+</div>

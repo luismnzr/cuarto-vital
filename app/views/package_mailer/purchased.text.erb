@@ -1,0 +1,13 @@
+Package Purchased
+
+Hi <%= @user.first_name %>, thank you for your purchase!
+
+Package: <%= @package.name %>
+Price: <%= format_currency(@package.price) %>
+Credits: <%= @user_package.credits_remaining %> classes
+Purchased: <%= format_date(@user_package.purchased_at.to_date) %>
+Expires: <%= format_date(@user_package.expires_at.to_date) %>
+
+You're ready to start booking classes. See you in the studio!
+
+Browse classes: <%= classes_url %>

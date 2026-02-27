@@ -1,0 +1,47 @@
+<footer class="bg-[var(--color-foreground)] text-white">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 lg:py-16">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="h-8 w-8 rounded-lg bg-[var(--color-primary)] flex items-center justify-center">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <span class="text-lg font-bold"><%= StudioSetting.get("studio_name") %></span>
+        </div>
+        <p class="text-sm text-gray-400 max-w-xs">Your journey to wellness starts here. Find classes that move and inspire you.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Studio</h4>
+        <nav class="space-y-3">
+          <%= link_to "Schedule", classes_path, class: "block text-sm text-gray-300 hover:text-white transition-colors" %>
+          <%= link_to "Pricing", packages_path, class: "block text-sm text-gray-300 hover:text-white transition-colors" %>
+          <%= link_to "About", about_path, class: "block text-sm text-gray-300 hover:text-white transition-colors" %>
+        </nav>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Support</h4>
+        <nav class="space-y-3">
+          <%= link_to "Terms", terms_path, class: "block text-sm text-gray-300 hover:text-white transition-colors" %>
+          <span class="block text-sm text-gray-300"><%= StudioSetting.get("studio_email") %></span>
+          <span class="block text-sm text-gray-300"><%= StudioSetting.get("studio_phone") %></span>
+        </nav>
+      </div>
+
+      <!-- Location -->
+      <div>
+        <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Location</h4>
+        <p class="text-sm text-gray-300"><%= StudioSetting.get("studio_address") %></p>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-gray-500">&copy; <%= Date.current.year %> <%= StudioSetting.get("studio_name") %>. All rights reserved.</p>
+      <p class="text-xs text-gray-500">Powered by Eclipse</p>
+    </div>
+  </div>
+</footer>

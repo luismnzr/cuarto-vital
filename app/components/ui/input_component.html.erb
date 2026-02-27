@@ -1,0 +1,24 @@
+<div class="space-y-1.5">
+  <% if @label %>
+    <label for="<%= @extra_attrs[:id] || @name %>" class="block text-sm font-medium text-[var(--color-foreground)]">
+      <%= @label %><%= " *" if @required %>
+    </label>
+  <% end %>
+  <input
+    type="<%= @type %>"
+    name="<%= @name %>"
+    id="<%= @extra_attrs[:id] || @name %>"
+    value="<%= @value %>"
+    placeholder="<%= @placeholder %>"
+    class="flex h-10 w-full rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm placeholder:text-[var(--color-muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 <%= 'border-[var(--color-destructive)]' if @error %>"
+    <% if @required %>required<% end %>
+    <% if @disabled %>disabled<% end %>
+    <% attrs = @extra_attrs.except(:id); %><%= tag.attributes(attrs) if attrs.any? %>
+  />
+  <% if @error %>
+    <p class="text-xs text-[var(--color-destructive)]"><%= @error %></p>
+  <% end %>
+  <% if @hint && !@error %>
+    <p class="text-xs text-[var(--color-muted-foreground)]"><%= @hint %></p>
+  <% end %>
+</div>

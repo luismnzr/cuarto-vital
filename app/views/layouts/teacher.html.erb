@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <title>Teacher — <%= content_for(:title) || StudioSetting.get("studio_name") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="h-full bg-[var(--color-background)] text-[var(--color-foreground)]" style="font-family: var(--font-sans);">
+    <header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-background)]">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center gap-8">
+            <span class="text-lg font-bold"><%= StudioSetting.get("studio_name") %></span>
+            <nav class="hidden md:flex items-center gap-6">
+              <%= link_to "Dashboard", teacher_dashboard_path, class: "text-sm font-medium hover:text-[var(--color-foreground)] #{'text-[var(--color-foreground)]' if current_page?(teacher_dashboard_path)} #{'text-[var(--color-muted-foreground)]' unless current_page?(teacher_dashboard_path)}" %>
+              <%= link_to "My Classes", teacher_classes_path, class: "text-sm font-medium hover:text-[var(--color-foreground)] #{'text-[var(--color-foreground)]' if current_page?(teacher_classes_path)} #{'text-[var(--color-muted-foreground)]' unless current_page?(teacher_classes_path)}" %>
+              <%= link_to "Schedule", classes_path, class: "text-sm font-medium text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+            </nav>
+          </div>
+          <div class="flex items-center gap-3">
+            <%= link_to teacher_profile_path, class: "hover:opacity-80 transition-opacity" do %>
+              <% if current_user.photo.attached? %>
+                <%= render Ui::AvatarComponent.new(name: current_user.full_name, src: url_for(current_user.photo.variant(resize_to_fill: [64, 64])), size: :sm) %>
+              <% else %>
+                <%= render Ui::AvatarComponent.new(name: current_user.full_name, size: :sm) %>
+              <% end %>
+            <% end %>
+            <%= link_to "Sign Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <%= render "shared/flash" %>
+
+    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>

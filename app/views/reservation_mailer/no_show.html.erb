@@ -1,0 +1,26 @@
+<h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">No-Show Recorded</h1>
+<p style="margin: 0 0 24px 0; font-size: 15px; color: #64748b; line-height: 1.5;">Hi <%= @user.first_name %>, we noticed you didn't make it to the following class.</p>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 20px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <%= email_detail_row("Class", @studio_class.name) %>
+        <%= email_detail_row("Date", format_class_date(@studio_class)) %>
+        <%= email_detail_row("Time", format_class_time(@studio_class)) %>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef2f2; border-radius: 8px; border: 1px solid #fecaca; margin-bottom: 24px;">
+  <tr>
+    <td style="padding: 16px 20px; font-size: 14px; color: #991b1b;">
+      Your class credit was not restored for this no-show.
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 0 0; font-size: 14px; color: #64748b; line-height: 1.5;">If you believe this was recorded in error, please contact us.</p>
+
+<%= email_button("Browse Classes", classes_url) %>

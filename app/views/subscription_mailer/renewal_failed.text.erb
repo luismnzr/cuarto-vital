@@ -1,0 +1,11 @@
+Payment Failed
+
+Hi <%= @user.first_name %>, we were unable to process your subscription payment.
+
+Plan: <%= @plan.name %>
+Amount: <%= format_currency(@plan.price) %>/<%= @plan.interval %>
+Status: Payment Failed
+
+Please update your payment method to continue your subscription and avoid losing access to classes.
+
+Update payment method: <%= profile_billing_url %>

@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Tell Tailwind v4 where to find utility classes - paths relative to project root */
+@source "../../../app/views";
+@source "../../../app/helpers";
+@source "../../../app/components";
+@source "../../../app/javascript";

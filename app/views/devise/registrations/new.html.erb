@@ -1,0 +1,88 @@
+<% content_for(:title) { "Sign Up" } %>
+
+<div class="flex min-h-[calc(100vh-4rem)]">
+  <!-- Left panel: gradient brand -->
+  <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)] via-[var(--color-primary)] to-[var(--color-accent)]"></div>
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+    <div class="relative flex flex-col justify-center px-12 lg:px-16">
+      <div class="flex items-center gap-2 mb-8">
+        <div class="h-10 w-10 rounded-lg bg-white/20 flex items-center justify-center">
+          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <span class="text-2xl font-bold text-white"><%= StudioSetting.get("studio_name") %></span>
+      </div>
+      <h2 class="text-3xl font-bold text-white">Start your<br>wellness journey</h2>
+      <p class="mt-4 text-white/70 max-w-sm">Create an account to browse classes, book sessions, and join our community of mindful movers.</p>
+      <div class="mt-12 flex items-center gap-4">
+        <div class="flex -space-x-2">
+          <div class="h-8 w-8 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs font-medium text-white">A</div>
+          <div class="h-8 w-8 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs font-medium text-white">M</div>
+          <div class="h-8 w-8 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs font-medium text-white">S</div>
+          <div class="h-8 w-8 rounded-full bg-white/20 border-2 border-white/30 flex items-center justify-center text-xs font-medium text-white">+</div>
+        </div>
+        <p class="text-sm text-white/70">Join <%= User.students.count %>+ members already practicing</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel: form -->
+  <div class="flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-sm">
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-[var(--color-foreground)]">Create your account</h1>
+        <p class="text-[var(--color-muted-foreground)] mt-2 text-sm">Already have an account? <%= link_to "Sign in", new_user_session_path, class: "font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)]" %></p>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <% if resource.errors.any? %>
+          <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+            <p class="text-sm font-medium text-red-700">Please fix the following errors:</p>
+            <ul class="mt-1 text-sm text-red-600 list-disc list-inside">
+              <% resource.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="user_first_name" class="block text-sm font-medium text-[var(--color-foreground)] mb-1.5">First name</label>
+              <%= f.text_field :first_name, placeholder: "Jane", required: true, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] bg-white text-sm placeholder:text-[var(--color-muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition" %>
+            </div>
+            <div>
+              <label for="user_last_name" class="block text-sm font-medium text-[var(--color-foreground)] mb-1.5">Last name</label>
+              <%= f.text_field :last_name, placeholder: "Doe", required: true, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] bg-white text-sm placeholder:text-[var(--color-muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition" %>
+            </div>
+          </div>
+
+          <div>
+            <label for="user_email" class="block text-sm font-medium text-[var(--color-foreground)] mb-1.5">Email address</label>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", required: true, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] bg-white text-sm placeholder:text-[var(--color-muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition" %>
+          </div>
+
+          <div>
+            <label for="user_password" class="block text-sm font-medium text-[var(--color-foreground)] mb-1.5">Password</label>
+            <%= f.password_field :password, autocomplete: "new-password", placeholder: "At least 6 characters", required: true, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] bg-white text-sm placeholder:text-[var(--color-muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition" %>
+            <p class="mt-1 text-xs text-[var(--color-muted-foreground)]">Must be at least 6 characters</p>
+          </div>
+
+          <div>
+            <label for="user_password_confirmation" class="block text-sm font-medium text-[var(--color-foreground)] mb-1.5">Confirm password</label>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Repeat your password", required: true, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] bg-white text-sm placeholder:text-[var(--color-muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition" %>
+          </div>
+
+          <button type="submit" class="w-full h-10 flex items-center justify-center text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+            Create account
+          </button>
+
+          <p class="text-xs text-center text-[var(--color-muted-foreground)]">
+            By signing up, you agree to our <%= link_to "Terms of Service", terms_path, class: "underline hover:text-[var(--color-foreground)]" %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

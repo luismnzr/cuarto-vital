@@ -1,0 +1,11 @@
+Your Package Has Expired
+
+Hi <%= @user.first_name %>, your class package has expired.
+
+Package: <%= @package.name %>
+Unused Credits: <%= @user_package.credits_remaining %> lost
+Expired On: <%= format_date(@user_package.expires_at.to_date) %>
+
+Purchase a new package to continue booking classes.
+
+View packages: <%= packages_url %>

@@ -1,0 +1,70 @@
+<% content_for(:page_title) { "New User" } %>
+
+<div class="max-w-2xl">
+  <%= link_to "&larr; Back to Users".html_safe, admin_users_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)] mb-4 inline-block" %>
+
+  <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+    <h2 class="text-lg font-semibold mb-6">Create New User</h2>
+
+    <%= form_with(model: @user, url: admin_users_path, class: "space-y-5") do |f| %>
+      <% if @user.errors.any? %>
+        <div class="p-4 rounded-lg bg-red-50 text-red-700 text-sm">
+          <p class="font-medium mb-1"><%= pluralize(@user.errors.count, "error") %> prevented saving:</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <% @user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :first_name, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.text_field :first_name, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+        <div>
+          <%= f.label :last_name, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.text_field :last_name, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+        <%= f.email_field :email, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+      </div>
+
+      <div>
+        <%= f.label :phone, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+        <%= f.text_field :phone, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+        <div>
+          <%= f.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= f.label :role, class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.select :role, User.roles.keys.map { |r| [r.titleize, r] }, {}, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+        <div>
+          <%= f.label :active, "Status", class: "block text-sm font-medium text-[var(--color-foreground)] mb-1" %>
+          <%= f.select :active, [["Active", true], ["Inactive", false]], {}, class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" %>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <%= f.submit "Create User", class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors cursor-pointer" %>
+        <%= link_to "Cancel", admin_users_path, class: "text-sm text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]" %>
+      </div>
+    <% end %>
+  </div>
+</div>

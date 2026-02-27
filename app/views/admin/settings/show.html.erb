@@ -1,0 +1,147 @@
+<% content_for(:page_title) { "Studio Settings" } %>
+<div class="max-w-2xl">
+  <h2 class="text-lg font-semibold mb-6">Studio Settings</h2>
+
+  <%= form_tag admin_settings_path, method: :patch, class: "space-y-8" do %>
+    <!-- Studio Information -->
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+      <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Studio Information</h3>
+      <div class="space-y-4">
+        <div>
+          <label for="settings_studio_name" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Studio Name</label>
+          <input type="text" name="settings[studio_name]" id="settings_studio_name" value="<%= StudioSetting.get('studio_name') %>" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+        </div>
+        <div>
+          <label for="settings_studio_email" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Contact Email</label>
+          <input type="email" name="settings[studio_email]" id="settings_studio_email" value="<%= StudioSetting.get('studio_email') %>" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+        </div>
+        <div>
+          <label for="settings_studio_phone" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Phone Number</label>
+          <input type="tel" name="settings[studio_phone]" id="settings_studio_phone" value="<%= StudioSetting.get('studio_phone') %>" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+        </div>
+        <div>
+          <label for="settings_studio_address" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Address</label>
+          <textarea name="settings[studio_address]" id="settings_studio_address" rows="2" class="w-full px-3 py-2 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"><%= StudioSetting.get('studio_address') %></textarea>
+        </div>
+        <div>
+          <label for="settings_studio_timezone" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Timezone</label>
+          <%= time_zone_select nil, nil, ActiveSupport::TimeZone.us_zones, { default: StudioSetting.get('studio_timezone') }, { name: "settings[studio_timezone]", id: "settings_studio_timezone", class: "w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" } %>
+        </div>
+        <div>
+          <label for="settings_currency" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Currency</label>
+          <select name="settings[currency]" id="settings_currency" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+            <% [["MXN (Mexican Peso)", "mxn"], ["USD (US Dollar)", "usd"], ["EUR (Euro)", "eur"]].each do |label, val| %>
+              <option value="<%= val %>" <%= 'selected' if StudioSetting.get('currency') == val %>><%= label %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Settings -->
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+      <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Booking Settings</h3>
+      <div class="space-y-4">
+        <div>
+          <label for="settings_booking_window_days" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Booking Window (days)</label>
+          <input type="number" name="settings[booking_window_days]" id="settings_booking_window_days" value="<%= StudioSetting.get('booking_window_days') %>" min="1" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+          <p class="text-xs text-[var(--color-muted-foreground)] mt-1">How far in advance students can book classes.</p>
+        </div>
+        <div>
+          <label for="settings_cancellation_window_hours" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Cancellation Window (hours)</label>
+          <input type="number" name="settings[cancellation_window_hours]" id="settings_cancellation_window_hours" value="<%= StudioSetting.get('cancellation_window_hours') %>" min="0" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+          <p class="text-xs text-[var(--color-muted-foreground)] mt-1">Cancellations within this window are considered late.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="hidden" name="settings[late_cancel_forfeit_credit]" value="false">
+          <input type="checkbox" name="settings[late_cancel_forfeit_credit]" id="settings_late_cancel_forfeit_credit" value="true" <%= 'checked' if StudioSetting.late_cancel_forfeit_credit? %> class="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
+          <label for="settings_late_cancel_forfeit_credit" class="text-sm font-medium text-[var(--color-foreground)]">Forfeit credit on late cancellation</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Waitlist Settings -->
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+      <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Waitlist Settings</h3>
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <input type="hidden" name="settings[waitlist_enabled]" value="false">
+          <input type="checkbox" name="settings[waitlist_enabled]" id="settings_waitlist_enabled" value="true" <%= 'checked' if StudioSetting.waitlist_enabled? %> class="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
+          <label for="settings_waitlist_enabled" class="text-sm font-medium text-[var(--color-foreground)]">Enable waitlist</label>
+        </div>
+        <div>
+          <label for="settings_max_waitlist_size" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Max Waitlist Size</label>
+          <input type="number" name="settings[max_waitlist_size]" id="settings_max_waitlist_size" value="<%= StudioSetting.get('max_waitlist_size') %>" min="1" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+          <p class="text-xs text-[var(--color-muted-foreground)] mt-1">Max number of people who can join the waitlist per class.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+      <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Features</h3>
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <input type="hidden" name="settings[shop_enabled]" value="false">
+          <input type="checkbox" name="settings[shop_enabled]" id="settings_shop_enabled" value="true" <%= 'checked' if StudioSetting.shop_enabled? %> class="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
+          <label for="settings_shop_enabled" class="text-sm font-medium text-[var(--color-foreground)]">Enable shop/merchandise</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wellhub Integration -->
+    <div class="bg-white rounded-xl border border-[var(--color-border)] p-6">
+      <h3 class="text-sm font-semibold text-[var(--color-foreground)] uppercase tracking-wider mb-4">Wellhub Integration</h3>
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <input type="hidden" name="settings[wellhub_enabled]" value="false">
+          <input type="checkbox" name="settings[wellhub_enabled]" id="settings_wellhub_enabled" value="true" <%= 'checked' if StudioSetting.wellhub_enabled? %> class="h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
+          <label for="settings_wellhub_enabled" class="text-sm font-medium text-[var(--color-foreground)]">Enable Wellhub integration</label>
+        </div>
+        <div>
+          <label for="settings_wellhub_gym_id" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Wellhub Gym ID</label>
+          <input type="text" name="settings[wellhub_gym_id]" id="settings_wellhub_gym_id" value="<%= StudioSetting.get('wellhub_gym_id') %>" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+          <p class="text-xs text-[var(--color-muted-foreground)] mt-1">Provided by Wellhub when your studio is onboarded. Auto-filled if integration is set up via Wellhub portal.</p>
+        </div>
+        <div>
+          <label for="settings_wellhub_product_id" class="block text-sm font-medium text-[var(--color-foreground)] mb-1">Wellhub Product ID</label>
+          <input type="text" name="settings[wellhub_product_id]" id="settings_wellhub_product_id" value="<%= StudioSetting.get('wellhub_product_id') %>" class="w-full h-10 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+          <p class="text-xs text-[var(--color-muted-foreground)] mt-1">Product ID from Wellhub for your gym's activity type. Found via the Wellhub partner portal or API.</p>
+        </div>
+        <% if StudioSetting.wellhub_enabled? %>
+          <div class="bg-[var(--color-background)] rounded-lg p-4">
+            <p class="text-sm font-medium text-[var(--color-foreground)] mb-2">Category Mapping</p>
+            <p class="text-xs text-[var(--color-muted-foreground)] mb-3">Map your class categories to Wellhub categories. Classes without a mapped category won't appear on Wellhub.</p>
+            <div class="space-y-2">
+              <% Category.ordered.each do |category| %>
+                <div class="flex items-center gap-3">
+                  <span class="text-sm text-[var(--color-foreground)] w-40"><%= category.name %></span>
+                  <input type="text" name="wellhub_categories[<%= category.id %>]" value="<%= category.wellhub_category_id %>" placeholder="Wellhub category ID" class="flex-1 h-8 px-3 rounded-lg border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]">
+                </div>
+              <% end %>
+            </div>
+          </div>
+          <div class="bg-[var(--color-background)] rounded-lg p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-medium text-[var(--color-foreground)]">Sync Schedule to Wellhub</p>
+                <p class="text-xs text-[var(--color-muted-foreground)] mt-0.5">Push class templates and upcoming slots to Wellhub. This runs automatically every 30 minutes.</p>
+              </div>
+              <%= button_to "Sync Now", admin_sync_wellhub_path, method: :post, class: "inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors cursor-pointer", form: { data: { turbo_confirm: "This will sync all class templates and upcoming slots to Wellhub. Continue?" } } %>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <%= link_to admin_wellhub_bookings_path, class: "inline-flex items-center gap-2 text-sm text-[var(--color-primary)] hover:underline" do %>
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              View Wellhub Bookings
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button type="submit" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary-hover)] transition-colors cursor-pointer">Save Settings</button>
+    </div>
+  <% end %>
+</div>

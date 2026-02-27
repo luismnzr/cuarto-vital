@@ -1,0 +1,28 @@
+<% content_for(:title) { "My Waitlists" } %>
+
+<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-2xl font-bold mb-8">My Waitlists</h1>
+
+  <% if @waitlist_entries.any? %>
+    <div class="space-y-3">
+      <% @waitlist_entries.each do |entry| %>
+        <%= render Ui::CardComponent.new do %>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold"><%= entry.studio_class.name %></h3>
+              <p class="text-sm text-[var(--color-muted-foreground)]">
+                <%= entry.studio_class.date.strftime("%A, %B %d") %> at
+                <%= entry.studio_class.start_time.strftime("%l:%M %p").strip %>
+              </p>
+            </div>
+            <div class="text-right">
+              <%= render Ui::BadgeComponent.new(text: "Position ##{entry.position}", variant: :secondary) %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-[var(--color-muted-foreground)]">You're not on any waitlists.</p>
+  <% end %>
+</div>

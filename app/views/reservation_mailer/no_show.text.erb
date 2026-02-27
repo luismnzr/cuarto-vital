@@ -1,0 +1,13 @@
+No-Show Recorded
+
+Hi <%= @user.first_name %>, we noticed you didn't make it to the following class.
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+
+Your class credit was not restored for this no-show.
+
+If you believe this was recorded in error, please contact us.
+
+Browse classes: <%= classes_url %>

@@ -1,0 +1,12 @@
+Reservation Confirmed
+
+Hi <%= @user.first_name %>, you're all set for class!
+
+Class: <%= @studio_class.name %>
+Date: <%= format_class_date(@studio_class) %>
+Time: <%= format_class_time(@studio_class) %>
+Teacher: <%= @studio_class.teacher.full_name %>
+
+Cancellation policy: Cancel at least <%= cancellation_window %> hours before class to receive a full credit refund.
+
+View your classes: <%= profile_classes_url %>

@@ -1,0 +1,108 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+/* Calendar view toggle buttons */
+.active-view {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.active-view:hover {
+  opacity: 0.9;
+}
+
+.inactive-view {
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-foreground);
+}
+
+.inactive-view:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Pagy pagination */
+.pagy.series-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pagy.series-nav > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-md, 0.5rem);
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.pagy.series-nav > a:hover:not([aria-disabled="true"]) {
+  background-color: var(--color-muted);
+}
+
+.pagy.series-nav > a[aria-current="page"] {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.pagy.series-nav > a[aria-disabled="true"]:not([aria-current="page"]) {
+  color: var(--color-muted-foreground);
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pagy.series-nav > a[role="separator"] {
+  opacity: 1;
+  letter-spacing: 0.1em;
+}
+
+.pagy.series-nav > a[aria-label="Previous"],
+.pagy.series-nav > a[aria-label="Next"] {
+  font-size: 0;
+  overflow: hidden;
+}
+
+.pagy.series-nav > a[aria-label="Previous"]::before,
+.pagy.series-nav > a[aria-label="Next"]::before {
+  content: "";
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.pagy.series-nav > a[aria-label="Previous"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M15 19l-7-7 7-7'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M15 19l-7-7 7-7'/%3E%3C/svg%3E");
+}
+
+.pagy.series-nav > a[aria-label="Next"]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5l7 7-7 7'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5l7 7-7 7'/%3E%3C/svg%3E");
+}
